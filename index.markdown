@@ -5,12 +5,10 @@
 layout: home
 ---
 
-## Things may appear
-
 So far this is just a placeholder, but it may not have to be.
 
 ```sql
 SELECT 'Hello' AS message FROM dual;
 ```
 
-Another thing.
+So long.
