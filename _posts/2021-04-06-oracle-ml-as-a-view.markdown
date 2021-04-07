@@ -137,3 +137,50 @@ SELECT * FROM table(rqTableEval(
 )    
 ;
 ```
+
+
+Update:
+
+The character problem is probably because we need to explicitly cast character columns when specifying the return schema.
+
+Here is an alternative version, using the original iris data but with somewhat modified variable names (but the species column is character (strictly, a factor).
+
+First, we create the model and save it to oracle with `ore.save`, create a function to do the prediction and return a data frame, and save it to oracle with `ore.scriptCreate`. This is practically the same as above.
+
+```r
+species_nb_model_char <- ore.odmNB(SPECIES ~ SEPAL_WIDTH + PETAL_LENGTH + PETAL_WIDTH + SEPAL_LENGTH, TEST_IRIS2)
+
+ore.save(species_nb_model_char, name='species_nb_model_char', overwrite = TRUE)
+
+
+
+iris_species_predict <- function(dat, ds, obj) {
+  library(rpart)
+  ore.load(name=ds, list=obj)
+  mod <- get(obj)
+  dat <- ore.frame(dat)
+  prd <- predict(mod, dat,supplemental.cols="SPECIES")
+  ore.pull(prd)
+}
+
+ore.scriptCreate('iris_species_predict', iris_species_predict)
+```
+
+Now, for important detail: In the third argument to the `rqTableEval` function, we supply a symbolic select statement that defines columns and column types. None of the values we select actually appear, but the column types and column names are used. By using `CAST()` we can make sure the columns are big enough for the content that is returned from R.
+
+```sql
+
+SELECT * FROM table(rqTableEval(
+  cursor(SELECT * FROM TEST_IRIS2),
+  cursor(SELECT 'species_nb_model_char' as "ds", 'species_nb_model_char' as "obj", 1 as "ore.connect" FROM dual),
+  'SELECT 1 AS SETOSA_PROB, 1 AS VERSICOLOR_PROB, 1 AS VIRGINICA_PROB, CAST(''a'' AS VARCHAR(255)) AS SPECIES, CAST(''b'' AS VARCHAR(255)) AS PREDICTED_SPECIES FROM dual', 
+  'iris_species_predict')
+  );
+
+```
+
+
+Two thoughts here:
+1. After having done this a time or two, take a look under "types" in your schema. Oracle has populated (littererd) it for you, with the column types you specified.
+1. This reminds me a little of database links in postgres, where column specifications must be done manually.
+
