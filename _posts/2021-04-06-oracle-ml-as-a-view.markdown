@@ -139,7 +139,7 @@ SELECT * FROM table(rqTableEval(
 ```
 
 
-Update:
+## Update
 
 The character problem is probably because we need to explicitly cast character columns when specifying the return schema.
 
