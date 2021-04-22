@@ -1,0 +1,14 @@
+
+# Performance and integrity
+
+
+## Indexes
+
+## constraints
+
+## Optimizing your queries
+### Inline views
+### Filter First
+### Take advantage of partitions
+### Explain plans
+### Leave some things for R

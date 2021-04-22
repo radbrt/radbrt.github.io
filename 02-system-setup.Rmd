@@ -1,0 +1,65 @@
+
+# System setup
+
+## Follow along with the BigData Lite VM or XE18 on Docker
+
+I started writing this book on the Oracle Bigdata Lite VM. This is a free virtual machine you can download from Oracle, and contains both an Oracle 12c installation, drivers, Rstudio Server, Hadoop, hive, and a whole host of other "Big data" related applications you can use to explore and learn.
+
+After a while, the Oracle 18c Express Edition (XE) came out, which is a free version of Oracle 18c which features all the same bells and whistles as the production grade database, but has restricted resources in terms of CPU, RAM and disk. For our use though, this database is perfect, and that's probably exactly what Oracle intended - let developers learn and experiment for free, while companies have to shell out for their products.
+
+I am running the XE version in a docker container, and linked it to an Rstudio container. This way, you can follow along with this book simply using two docker containers. Sadly, Oracle doesn't provide the XE container image directly, so you need to download the database install file from the Oracle website (requires a free account), and place it in a designated forlder for build to use. The same is true for the Oracle drivers which is required for the rstudio container. The build scripts for the containers can be found at https://github.com/radbrt/xestudio.
+
+
+## A production environment
+
+This book is not going to cover how to set up a database. If you just want to learn, the Bigdata Lite VM will be a great resource. If you need to start storing production data in a database, you should probably leave it to dedicated database administrators, or use a cloud service (database-as-a-service) that leaves the management to the provider.
+
+With the database management is taken care of, you still might have to install Rstudio and Oracle drivers on your own. And while you are at it, install SQL Workbench. This interactive graphical SQL-client has a lot of advanced features, provides a very responsive way to execute queries when testing and exploring, and is a perfect companion to Rstudio.
+
+### Installing drivers
+
+### Installing Rstudio
+
+Rstudio is available from https://rstudio.com. There is a free version distributed with the AGPL license, as well as a commercial version for those who need. Rstudio develops and supports a wide array of libraries, addons and apps that are available for free, so if you are in a commercial environment this is an added bonus to paying for the commercial license and commercial support.
+
+Rstudio is available both as a desktop version and a server with web-interface. The two versions have a very similar look and feel, so choosing which one to install is mostly a question of which one is most practical for your use case. The desktop version supports most operating systems including the major linux distributions, while the server is supported on the major linux distributions.
+
+### Installing SQL Workbench
+
+The workbench is a Java application, and supports Windows, Mac and major linux distributions. Simply download and install from https://www.mysql.com/products/workbench/.
+
+Connecting to the database is fairly simple from the dialog box. The server hostname should be familiar to you (or ask the system administrator), as with the username/password. Oracle uses port 1521 by default, and this is also the default port number selected in the dialog. Depending on the server setup you either have to specify a service ID (SID), or a Service name. Again, your sysadmin should be able to help you with these details.
+
+## Connecting to a database from R
+
+There are multiple libraries available in R that lets you connect to a database, run queries, and transfer data. For oracle users, the most convenient one might be **ROracle**.
+
+```{r dblibinstall, include=TRUE, eval=FALSE}
+install.packages("ROracle")
+```
+
+In order to connect to Oracle using this library, you need your connection details, and to have installed the Oracle drivers on your system. When installed correctly the drivers are registered with the operating system, so that you do not need to refer to the exact location of the driver.
+
+```{r dbdrv_ex, include=TRUE, eval=FALSE}
+
+library(ROracle)
+drv <- dbDriver("Oracle")
+host <- "localhost"
+port <- 1521
+sid <- "orcl"
+
+connect.string <- paste(
+  "(DESCRIPTION=",
+  "(ADDRESS=(PROTOCOL=tcp)(HOST=", host, ")(PORT=", port, "))",
+  "(CONNECT_DATA=(SID=", sid, ")))", sep = "")
+
+connection <- dbConnect(drv, username="moviedemo", password="welcome1", dbname=connect.string)
+tickercon <- dbConnect(drv, username="pmuser", password="pmuser", dbname=connect.string)
+```
+
+This should leave you with two new objects called `connection` and `tickercon`, both instances of class OraConnection, and represent connections to two different databases that ship with the BigdataLite VM.
+
+> **Password security**
+>
+> If you cringe when you look at the hardcoded password above, good on you. In this example, with a test-database, it doesn't matter. But when you set up a workflow in production, you should shun hardcoded, plaintext passwords. Rstudio has a great resource on this, see http://db.rstudio.com/best-practices/managing-credentials/.
+> The fastest solution is to replace the hardcoded password with `rstudioapi::askForPassword("Enter password")`, and you will be prompted for the password.

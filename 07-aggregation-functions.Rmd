@@ -1,0 +1,83 @@
+
+# Aggregation functions {aggregation-functions}
+
+```{r, include=FALSE, cache=FALSE}
+library(ROracle)
+drv <- dbDriver("Oracle")
+host <- "localhost"
+port <- 1521
+sid <- "orcl"
+
+connect.string <- paste(
+  "(DESCRIPTION=",
+  "(ADDRESS=(PROTOCOL=tcp)(HOST=", host, ")(PORT=", port, "))",
+  "(CONNECT_DATA=(SID=", sid, ")))", sep = "")
+
+con <- dbConnect(drv, username="moviedemo", password="welcome1", dbname=connect.string)
+
+tickercon <- dbConnect(drv, username="pmuser", password="pmuser", dbname=connect.string)
+
+```
+
+Since we have already dived deep into aggregations in \@ref(intermediate-sql), this chapter will expand on aggregations by going through some of the other aggregation functions found in Oracle.
+
+## Median and quantiles
+
+Medians are easy to compute, simply switch `AVG` with `MEDIAN` and you are set. Quartiles, deciles and percentiles give you a lot of options, and so they are not implemented in the same way - hence, the syntax is a bit trickier. Let's look at an example, again from the transactions table, where we compare the median, quartiles, P10 and P90 of the unitprice between countries.
+
+```{sql connection=con, pctl_sql}
+SELECT country, 
+PERCENTILE_DISC(0.1) WITHIN GROUP(ORDER BY unitprice) AS p10_price,
+PERCENTILE_DISC(0.25) WITHIN GROUP(ORDER BY unitprice) AS q1_price,
+MEDIAN(unitprice) AS median_price,
+PERCENTILE_DISC(0.5) WITHIN GROUP(ORDER BY unitprice) AS p50_price,
+PERCENTILE_DISC(0.75) WITHIN GROUP(ORDER BY unitprice) AS q3_price,
+PERCENTILE_DISC(0.9) WITHIN GROUP(ORDER BY unitprice) AS p90_price
+FROM trx
+GROUP BY country
+ORDER BY COUNT(1) DESC
+FETCH FIRST 10 ROWS ONLY
+```
+
+To abbreviate the output, we have ordered the output by number of sales, and limited the result to the ten countries with the most sales.
+
+The `MEDIAN` function is simple, taking only the unitprice as input. As you can see from the `median_price` and `p50_price` columns, this is equivalent to taking the 50th percentile. 
+
+The `PERCENTILE_DISC` function which returns the percentiles, is somewhat more involved. In order to understand the logic, remember what percentiles (and quartiles and medians) really are: They are the value at a given observation, after the data has been sorted in ascending order by that value. Therefore, the `PERCENTILE_DISC` function only takes the percentile as an argument. The variable we are interested in, `unitprice`, is specified in the `WITHIN GROUP` statement, as the variable we are ordering by. Because the SQL syntax is quite consistent, you could even add some confusion to your calculations by altering the sort order. Try it yourself by writing `ORDER BY unitprice DESC` in the `WITHIN GROUP` statement for `p10_price`. Suddenly you will have the 90th percentile instead of the 10th.
+
+A second, smaller cause for confusion is the function name, `PERCENTILE_DISC`. For our purposes, this is the normal percentile function we want to use. But there is a different percentile function, `PERCENTILE_CONT`, which tries to linearly interpolate the values and return the given percentile from that interpolated function.
+
+## First values {first-values}
+
+Another interesting thing to grab, is the first or last value of some variable, ordered by some other variable. To illustrate this, ask yourself: Are customers likely to buy larger quantities of products with a low unit price, or a high unit price?
+
+If we want to investigate this, we can select the minimum quantity purchased of the cheapest product sold in each country, and the maximum quantity sold of the most expensive product sold in each country.
+
+```{sql, connection=con}
+SELECT country, 
+  AVG(quantity) KEEP (DENSE_RANK FIRST ORDER BY unitprice) AS min_q_cheap_products,
+  AVG(quantity) KEEP (DENSE_RANK LAST ORDER BY unitprice) AS max_q_expensive_products
+FROM trx
+GROUP BY country
+ORDER BY COUNT(1) DESC
+FETCH FIRST 10 ROWS ONLY
+```
+
+
+
+## Aggregating text
+Aggregating numbers is one thing, but averages and sums don't lend themselves as nicely to text data. What Oracle *can* do however, is to concatenate text for you. Say, for example, you want to collect all the products of an order in a single cell. This can be done with the special `LISTAGG()` function, which takes two arguments: The text field, and whatever character string you want to separate the concatenated cells by. In addition (because this just couldn't be this simple), the function must be followed by a `WITHIN GROUP` statement, in which you specify how the cells should be ordered before concatenation.
+
+
+```{sql, connection=con}
+SELECT INVOICENO, COUNT(1) AS number_of_goods, LISTAGG(DESCRIPTION, ', ') WITHIN GROUP ( ORDER BY stockcode) AS goods
+FROM TRX
+--WHERE INVOICENO IN('536384', '536385')
+GROUP BY INVOICENO
+FETCH FIRST 3 ROWS ONLY
+```
+
+In this query, we select three columns, two of which are calculated in the aggregation. The `COUNT` is simple enough, the `LISTAGG` deserves some further explanation. The item description is in the aptly named `DESCRIPTION` field, which is the first argument to `LISTAGG`. The second argument is a comma followed by space, in **single** quotes, specifying that we want the descriptions separated by a space and a comma - which makes the text readable.
+
+The `WITHIN GROUP` clause is not optional even if you couldn't care less about the order in which the descriptions appear. You can, of course, arrange the items alphabetically by ordering by the description.
+

@@ -1,0 +1,125 @@
+
+# Statistical functions
+```{r dbdrv_ch9, include=FALSE, eval=TRUE}
+
+library(ROracle)
+drv <- dbDriver("Oracle")
+host <- "localhost"
+port <- 1521
+sid <- "orcl"
+
+connect.string <- paste(
+  "(DESCRIPTION=",
+  "(ADDRESS=(PROTOCOL=tcp)(HOST=", host, ")(PORT=", port, "))",
+  "(CONNECT_DATA=(SID=", sid, ")))", sep = "")
+
+con <- dbConnect(drv, username="moviedemo", password="welcome1", dbname=connect.string)
+tickercon <- dbConnect(drv, username="pmuser", password="pmuser", dbname=connect.string)
+
+```
+Usually, statistics is best suited to do in R. But if your data is large enough and your needs aren't too advanced, Oracle packs an impressive array of statistical functions and can often execute them blazingly fast.
+
+## Covariance: Revisitng quantity vs unitprice
+
+In \@ref(first-values), we looked at the average quantity sold of the cheapest products, compared to the average quantity sold of the most expensive product in each country - the theory being that cheap products sell in higher quantities. Not the most provocative theory, but good enough for a teaching exercise.
+
+This question is probably better answered with some more advanced (and standard) statistical functions. We can start by taking the simple covariance between unitprice and quantity.
+
+```{sql, connection=con}
+SELECT country, COVAR_POP(unitprice, quantity) as price_quantity_covar FROM trx
+GROUP BY country
+ORDER BY COUNT(1) DESC
+FETCH FIRST 10 ROWS ONLY
+```
+
+To no surprise, we find a negative correlation between unit price and quantity sold in every country we cared to list.
+
+There are two covariance functions: `COVAR_POP` (which we used here), and `COVAR_SAMP`, which are asymptotically equal with high sample size.
+
+Covariance in small samples need to adjust for the one degree of freedom used, by removing 1 from $n$:
+
+$$\frac{\sum(expr1 * expr2) - \sum expr1 * \sum expr2}{n * (n-1)}$$
+
+For `COVAR_POP`, the denominator is $n^2$ instead of $n*(n-1)$.
+
+
+## Regression
+Hopefully, the fact that Oracle databases does regression is impressive enough in itself, because the functionality is really limited to superficially simple cases. But if you need to do a regression with a single independent variable, Oracle is there for you. But seriously, do this in R instead if possible.
+
+```{sql, connection=con}
+SELECT REGR_INTERCEPT(quantity, unitprice) AS beta_0,
+      REGR_SLOPE(quantity, unitprice) AS beta_1
+FROM trx
+```
+
+The regression consists of running two different functions, one to calculate the intercept, and one to calculate the regression coefficient (and since we are limited to a single independent variable, there is only one slope to calculate). Still this syntax requires us to specify the model twice, and happily spits out a result even if we are unfortunate enough to, say, switch the arguments in one of the functions.
+
+The only redeeming feature of regression in Oracle is that it plays nicely with the `GROUP BY` statement, so that we with hardly any effort can create separate regression models for each country.
+
+```{sql, connection=con}
+SELECT country, COUNT(1) AS goods_sold, REGR_INTERCEPT(quantity, unitprice) AS beta_0,
+      REGR_SLOPE(quantity, unitprice) AS beta_1
+FROM trx
+GROUP BY country
+```
+
+
+## T-tests
+
+>A lot of statistical tests assume that the data is normally distributed, which is far from the case in most real-world data. This example is meant to demonstrate an SQL funtion, and is unfortunately not sound statistical advice.
+
+Let's take a closer look at Germany and France in the sales data. These two countries have a similar number of sales (7-8000 each), and we might want to explore wether the customers buy similarly-priced items.
+
+First, a simple summary table to give a clue about the sales figures for the countries:
+
+```{sql, connection=con}
+SELECT COUNTRY, COUNT(1), median(unitprice), avg(unitprice), STDDEV(unitprice), MAX(unitprice) FROM trx
+WHERE country IN('Germany','France', 'EIRE')
+GROUP BY country
+```
+
+Now, for the t-test comparing France and Germany. Note that only two countries can be compared at the same time.
+
+```{sql, connection=con}
+SELECT STATS_T_TEST_INDEP(COUNTRY, unitprice, 'TWO_SIDED_SIG' ) AS two_sided_p_value
+FROM trx
+WHERE country IN('Germany','France')
+```
+
+The two-sided T-test for independence cannot lead us reject our null-hypothesis that the average unitprice for products sold in Germany is the same as the average unitprice for products sold in France. Looking at the summary statistics this conclusion is a little strange, given that there is a large number of observations and the average unitprice in Germany and France are 4 and 5 (Euros?) respectively. But the standard deviation for france is very large - 80.
+
+Just for fun, let's take a look at the difference between Germany and Ireland as well.
+
+```{sql, connection=con}
+SELECT STATS_T_TEST_INDEP(COUNTRY, unitprice, 'TWO_SIDED_SIG' ) AS two_sided_p_value
+FROM trx
+WHERE country IN('Germany','EIRE')
+```
+
+This time, we can safely reject the null-hypothesis that the average unit prices are equal.
+
+
+## Kolmogorov-Smirnoff tests
+
+As we noted at the top of the previous chapter, the t-test is really not the right test for this type of data, because the distribution is anything but normal. In these cases, we either have to find what distribution fits the data, or we can opt for a test that does not require a given distribution. Kolmogorov-Smirnoff (KS for short) is that type of test.
+
+The syntax for KS tests are beautifully similar to the t-test. We also print the KS-statistic. The third argument defaults to 'SIG' (significance), but we included it for clarity.
+
+```{sql, connection=con}
+SELECT 
+STATS_KS_TEST(COUNTRY, unitprice, 'STATISTIC') AS KS_value,
+STATS_KS_TEST(COUNTRY, unitprice, 'SIG') AS significance
+FROM trx
+WHERE country IN('Germany','France')
+```
+
+The KS-test does not test for equality of the *mean*, but wether the two distributions a whole are sufficiently similar to believe that they were drawn from the same population. Intuitively, the function looks at the area with the biggest difference between the two samples and calculates wether that could be due to random choice.
+
+As we see, the KS-test leaves little doubt that there is a difference in the price of the goods bought in France and Germany, while we could not make that conclusion using the T-statistic. The difference is probably due to the long tail of high-price items. France had some much more expensive sales than Germany, which the T-test couldn't properly account for.
+
+
+## And more...
+
+These are two quite random examples of statistical tests in Oracle, but the list includes F-test (`STATS_F_TEST`), Mann-Whitney tests (`STATS_MW_TEST`), Wilcox (`STATS_WSR_TEST`) and ANOVA (`STATS_ONE_WAY_ANOVA`).
+
+

@@ -1,0 +1,66 @@
+
+# Analytical functions
+
+## Over the partitions and far away {#windows}
+
+Even without aggregating, it is possible to create an average of a column. A new, computed column can be added to an existing selection by using the **analytical** average function. This is in fact the same function as the aggregate function we covered in last chapter, but with an added keyword to distinguish it from the aggregate function and add a host of new features. 
+
+Let's start with the simplest example possible, taking the average of stock prices.
+
+```{sql, connection=tickercon}
+SELECT symbol, tstamp, price, AVG(price) OVER() FROM ticker
+WHERE symbol='ACME'
+ORDER BY tstamp
+```
+
+The average stock price for the ACME corporation between April 1st and April 20th is added as a new column, and repeated on all rows. The `OVER()` statement is new, and used exclusively on these types of analytical functions. An empty `OVER()` statement means that we are taking the average over all the rows.
+
+But what if we don't want to restrict ourselves to ACME? What if we want to do this for all stocks in the table? We make use of the previously empty `OVER()` statement. Inside the paranthesis, you can add a `PARTITION` statement that takes the average over distinct values of some other column - just like the aggregate functions do with `GROUP BY`. Let's take a look, but this time we limit the query a little, to avid getting the whole 20 days for each stock.
+
+```{sql, connection=tickercon}
+SELECT symbol, tstamp, price, AVG(price) OVER(PARTITION BY symbol) FROM ticker
+WHERE tstamp<=TO_DATE('05042011', 'DDMMYYYY')
+ORDER BY symbol, tstamp
+```
+
+As the name suggests, partitioning the data by symbol lets us create separate average for each stock.
+
+Better yet, we can compute a moving average of the price by adding just a few more statements.
+
+```{sql, connection=tickercon}
+SELECT symbol, tstamp, price, 
+AVG(price) OVER(PARTITION BY symbol ORDER BY tstamp ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW ) AS moving_avg
+FROM ticker
+WHERE tstamp<=TO_DATE('05042011', 'DDMMYYYY')
+ORDER BY symbol, tstamp
+```
+
+Now we're talking. A moving (cumulative) average for each stock. These averages are a great way to smooth out curves that otherwise would be too noisy to make sense of. If an average of all preceding rows are a bit too much, limit the preceding rows in the same way you limit following rows. Here are two more examples, one limiting to 5 rows preceding, and another taking the average from two preceding and two following.
+
+```{sql, connection=tickercon}
+SELECT symbol, tstamp, price, 
+AVG(price) OVER(PARTITION BY symbol ORDER BY tstamp ROWS BETWEEN 5 PRECEDING AND CURRENT ROW ) AS moving_avg_1,
+AVG(price) OVER(PARTITION BY symbol ORDER BY tstamp ROWS BETWEEN 2 PRECEDING AND 2 FOLLOWING ) AS moving_avg_2
+FROM ticker
+WHERE tstamp<=TO_DATE('05042011', 'DDMMYYYY')
+ORDER BY symbol, tstamp
+```
+
+Finally, you don't have to specify the number of rows. Instead, you can specify the time interval given that you order by some variable of the `date`-variety. Let's make a 3-day moving average. Even though this is no different from specifying 3 rows in this specific dataset, it comes in handy when you are dealing with missing values, weekends, and arbitrary number of rows per day.
+
+```{sql, connection=tickercon}
+SELECT symbol, tstamp, price, 
+AVG(price) OVER(PARTITION BY symbol ORDER BY tstamp RANGE BETWEEN INTERVAL '3' DAY PRECEDING AND CURRENT ROW ) AS moving_avg_1
+FROM ticker
+WHERE tstamp<=TO_DATE('05042011', 'DDMMYYYY')
+ORDER BY symbol, tstamp
+```
+
+Instead of days, keywords like `'MONTH'` and `'YEAR'` can also be used.
+
+Many of the usual aggregate functions can be used as analutical functions, but notably median and quantiles are missing. These must be computed in R instead.
+
+
+
+
+## Models

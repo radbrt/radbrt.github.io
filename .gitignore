@@ -1,5 +1,8 @@
-_site
-.sass-cache
-.jekyll-cache
-.jekyll-metadata
-vendor
+.Rproj.user
+.Rhistory
+.RData
+data
+_publish.R
+_book
+_bookdown_files
+rsconnect

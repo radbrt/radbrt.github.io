@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 17 What Oracle R Enterprise is | Data analysis with R and Oracle</title>
+  <meta name="description" content="Oracle is one of the most common database systems used in the business world. For analysts, an Oracle database is often their data souce. Being able to effectively query databases, and leave to the database what the database is best at and R what R is best at, can speed up analysis and reduce computational overhead." />
+  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 17 What Oracle R Enterprise is | Data analysis with R and Oracle" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="Oracle is one of the most common database systems used in the business world. For analysts, an Oracle database is often their data souce. Being able to effectively query databases, and leave to the database what the database is best at and R what R is best at, can speed up analysis and reduce computational overhead." />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 17 What Oracle R Enterprise is | Data analysis with R and Oracle" />
+  
+  <meta name="twitter:description" content="Oracle is one of the most common database systems used in the business world. For analysts, an Oracle database is often their data souce. Being able to effectively query databases, and leave to the database what the database is best at and R what R is best at, can speed up analysis and reduce computational overhead." />
+  
+
+<meta name="author" content="Henning Holgersen" />
+
+
+<meta name="date" content="2021-04-22" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="big-data-databases.html"/>
+<link rel="next" href="references.html"/>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">A Minimal Book Example</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Who is this book for?</a><ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#what-will-the-book-cover"><i class="fa fa-check"></i><b>1.1</b> What will the book cover?</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#what-does-the-book-not-cover"><i class="fa fa-check"></i><b>1.2</b> What does the book not cover?</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>2</b> Introduction</a><ul>
+<li class="chapter" data-level="2.1" data-path="intro.html"><a href="intro.html#what-analysts-need"><i class="fa fa-check"></i><b>2.1</b> What analysts need</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="system-setup.html"><a href="system-setup.html"><i class="fa fa-check"></i><b>3</b> System setup</a><ul>
+<li class="chapter" data-level="3.1" data-path="system-setup.html"><a href="system-setup.html#follow-along-with-the-bigdata-lite-vm-or-xe18-on-docker"><i class="fa fa-check"></i><b>3.1</b> Follow along with the BigData Lite VM or XE18 on Docker</a></li>
+<li class="chapter" data-level="3.2" data-path="system-setup.html"><a href="system-setup.html#a-production-environment"><i class="fa fa-check"></i><b>3.2</b> A production environment</a><ul>
+<li class="chapter" data-level="3.2.1" data-path="system-setup.html"><a href="system-setup.html#installing-drivers"><i class="fa fa-check"></i><b>3.2.1</b> Installing drivers</a></li>
+<li class="chapter" data-level="3.2.2" data-path="system-setup.html"><a href="system-setup.html#installing-rstudio"><i class="fa fa-check"></i><b>3.2.2</b> Installing Rstudio</a></li>
+<li class="chapter" data-level="3.2.3" data-path="system-setup.html"><a href="system-setup.html#installing-sql-workbench"><i class="fa fa-check"></i><b>3.2.3</b> Installing SQL Workbench</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="system-setup.html"><a href="system-setup.html#connecting-to-a-database-from-r"><i class="fa fa-check"></i><b>3.3</b> Connecting to a database from R</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="a-relational-state-of-mind.html"><a href="a-relational-state-of-mind.html"><i class="fa fa-check"></i><b>4</b> A relational state of mind</a><ul>
+<li class="chapter" data-level="4.1" data-path="a-relational-state-of-mind.html"><a href="a-relational-state-of-mind.html#an-illustrated-example-with-movie-data"><i class="fa fa-check"></i><b>4.1</b> An illustrated example with movie-data</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="loading-data.html"><a href="loading-data.html"><i class="fa fa-check"></i><b>5</b> Loading our data</a></li>
+<li class="chapter" data-level="6" data-path="basic-sql.html"><a href="basic-sql.html"><i class="fa fa-check"></i><b>6</b> Basic SQL</a><ul>
+<li class="chapter" data-level="6.1" data-path="basic-sql.html"><a href="basic-sql.html#select-from-where-starting-our-exploration"><i class="fa fa-check"></i><b>6.1</b> <code>SELECT</code> <code>FROM</code> <code>WHERE</code>? Starting our exploration</a><ul>
+<li class="chapter" data-level="6.1.1" data-path="basic-sql.html"><a href="basic-sql.html#a-quick-glance-at-our-data"><i class="fa fa-check"></i><b>6.1.1</b> A quick glance at our data</a></li>
+<li class="chapter" data-level="6.1.2" data-path="basic-sql.html"><a href="basic-sql.html#simple-aggregates"><i class="fa fa-check"></i><b>6.1.2</b> Aggregating your results</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="basic-sql.html"><a href="basic-sql.html#more-ways-to-join-tables"><i class="fa fa-check"></i><b>6.2</b> More ways to <code>JOIN</code> tables</a></li>
+<li class="chapter" data-level="6.3" data-path="basic-sql.html"><a href="basic-sql.html#a-few-common-gotchas"><i class="fa fa-check"></i><b>6.3</b> A few common gotchas</a><ul>
+<li class="chapter" data-level="6.3.1" data-path="basic-sql.html"><a href="basic-sql.html#missing-values"><i class="fa fa-check"></i><b>6.3.1</b> Missing values</a></li>
+<li class="chapter" data-level="6.3.2" data-path="basic-sql.html"><a href="basic-sql.html#execution-order"><i class="fa fa-check"></i><b>6.3.2</b> Execution order</a></li>
+<li class="chapter" data-level="6.3.3" data-path="basic-sql.html"><a href="basic-sql.html#ansi-and-the-dialects"><i class="fa fa-check"></i><b>6.3.3</b> ANSI and the dialects</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="intermediate-sql-intermediate-sql.html"><a href="intermediate-sql-intermediate-sql.html"><i class="fa fa-check"></i><b>7</b> Intermediate SQL {intermediate-sql}</a><ul>
+<li class="chapter" data-level="7.1" data-path="intermediate-sql-intermediate-sql.html"><a href="intermediate-sql-intermediate-sql.html#create-conditional-statements-with-case-when"><i class="fa fa-check"></i><b>7.1</b> Create conditional statements with <code>CASE WHEN</code></a></li>
+<li class="chapter" data-level="7.2" data-path="intermediate-sql-intermediate-sql.html"><a href="intermediate-sql-intermediate-sql.html#filter-on-aggregates-with-having"><i class="fa fa-check"></i><b>7.2</b> Filter on aggregates with <code>HAVING</code></a></li>
+<li class="chapter" data-level="7.3" data-path="intermediate-sql-intermediate-sql.html"><a href="intermediate-sql-intermediate-sql.html#more-about-limiting-the-result-with-fetch-first"><i class="fa fa-check"></i><b>7.3</b> More about limiting the result with <code>FETCH FIRST</code></a></li>
+<li class="chapter" data-level="7.4" data-path="intermediate-sql-intermediate-sql.html"><a href="intermediate-sql-intermediate-sql.html#simple-convenience-functions"><i class="fa fa-check"></i><b>7.4</b> Simple convenience functions</a><ul>
+<li class="chapter" data-level="7.4.1" data-path="intermediate-sql-intermediate-sql.html"><a href="intermediate-sql-intermediate-sql.html#the-decode-function"><i class="fa fa-check"></i><b>7.4.1</b> The <code>decode</code> function</a></li>
+<li class="chapter" data-level="7.4.2" data-path="intermediate-sql-intermediate-sql.html"><a href="intermediate-sql-intermediate-sql.html#upper-lower"><i class="fa fa-check"></i><b>7.4.2</b> upper / lower</a></li>
+<li class="chapter" data-level="7.4.3" data-path="intermediate-sql-intermediate-sql.html"><a href="intermediate-sql-intermediate-sql.html#substring"><i class="fa fa-check"></i><b>7.4.3</b> substring</a></li>
+<li class="chapter" data-level="7.4.4" data-path="intermediate-sql-intermediate-sql.html"><a href="intermediate-sql-intermediate-sql.html#regular-expressions"><i class="fa fa-check"></i><b>7.4.4</b> Regular expressions</a></li>
+<li class="chapter" data-level="7.4.5" data-path="intermediate-sql-intermediate-sql.html"><a href="intermediate-sql-intermediate-sql.html#dates"><i class="fa fa-check"></i><b>7.4.5</b> Dealing with dates</a></li>
+</ul></li>
+<li class="chapter" data-level="7.5" data-path="intermediate-sql-intermediate-sql.html"><a href="intermediate-sql-intermediate-sql.html#what-we-are-not-going-to-cover"><i class="fa fa-check"></i><b>7.5</b> What we are not going to cover</a><ul>
+<li class="chapter" data-level="7.5.1" data-path="intermediate-sql-intermediate-sql.html"><a href="intermediate-sql-intermediate-sql.html#plsql"><i class="fa fa-check"></i><b>7.5.1</b> PL/SQL</a></li>
+<li class="chapter" data-level="7.5.2" data-path="intermediate-sql-intermediate-sql.html"><a href="intermediate-sql-intermediate-sql.html#the-dbplyr-library"><i class="fa fa-check"></i><b>7.5.2</b> the <code>dbplyr</code> library</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="aggregation-functions-aggregation-functions.html"><a href="aggregation-functions-aggregation-functions.html"><i class="fa fa-check"></i><b>8</b> Aggregation functions {aggregation-functions}</a><ul>
+<li class="chapter" data-level="8.1" data-path="aggregation-functions-aggregation-functions.html"><a href="aggregation-functions-aggregation-functions.html#median-and-quantiles"><i class="fa fa-check"></i><b>8.1</b> Median and quantiles</a></li>
+<li class="chapter" data-level="8.2" data-path="aggregation-functions-aggregation-functions.html"><a href="aggregation-functions-aggregation-functions.html#first-values-first-values"><i class="fa fa-check"></i><b>8.2</b> First values {first-values}</a></li>
+<li class="chapter" data-level="8.3" data-path="aggregation-functions-aggregation-functions.html"><a href="aggregation-functions-aggregation-functions.html#aggregating-text"><i class="fa fa-check"></i><b>8.3</b> Aggregating text</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="analytical-functions.html"><a href="analytical-functions.html"><i class="fa fa-check"></i><b>9</b> Analytical functions</a><ul>
+<li class="chapter" data-level="9.1" data-path="analytical-functions.html"><a href="analytical-functions.html#windows"><i class="fa fa-check"></i><b>9.1</b> Over the partitions and far away</a></li>
+<li class="chapter" data-level="9.2" data-path="analytical-functions.html"><a href="analytical-functions.html#models"><i class="fa fa-check"></i><b>9.2</b> Models</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="statistical-functions.html"><a href="statistical-functions.html"><i class="fa fa-check"></i><b>10</b> Statistical functions</a><ul>
+<li class="chapter" data-level="10.1" data-path="statistical-functions.html"><a href="statistical-functions.html#covariance-revisitng-quantity-vs-unitprice"><i class="fa fa-check"></i><b>10.1</b> Covariance: Revisitng quantity vs unitprice</a></li>
+<li class="chapter" data-level="10.2" data-path="statistical-functions.html"><a href="statistical-functions.html#regression"><i class="fa fa-check"></i><b>10.2</b> Regression</a></li>
+<li class="chapter" data-level="10.3" data-path="statistical-functions.html"><a href="statistical-functions.html#t-tests"><i class="fa fa-check"></i><b>10.3</b> T-tests</a></li>
+<li class="chapter" data-level="10.4" data-path="statistical-functions.html"><a href="statistical-functions.html#kolmogorov-smirnoff-tests"><i class="fa fa-check"></i><b>10.4</b> Kolmogorov-Smirnoff tests</a></li>
+<li class="chapter" data-level="10.5" data-path="statistical-functions.html"><a href="statistical-functions.html#and-more..."><i class="fa fa-check"></i><b>10.5</b> And more...</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="row-pattern-matching.html"><a href="row-pattern-matching.html"><i class="fa fa-check"></i><b>11</b> Row pattern matching</a><ul>
+<li class="chapter" data-level="11.1" data-path="row-pattern-matching.html"><a href="row-pattern-matching.html#a-simpleish-example"><i class="fa fa-check"></i><b>11.1</b> A simple(ish) example</a></li>
+<li class="chapter" data-level="11.2" data-path="row-pattern-matching.html"><a href="row-pattern-matching.html#a-more-involved-example"><i class="fa fa-check"></i><b>11.2</b> A more involved example</a><ul>
+<li class="chapter" data-level="11.2.1" data-path="row-pattern-matching.html"><a href="row-pattern-matching.html#importing-and-cleaning"><i class="fa fa-check"></i><b>11.2.1</b> Importing and cleaning</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="inserting-and-updating-data.html"><a href="inserting-and-updating-data.html"><i class="fa fa-check"></i><b>12</b> Inserting and updating data</a><ul>
+<li class="chapter" data-level="12.1" data-path="inserting-and-updating-data.html"><a href="inserting-and-updating-data.html#committing-changes-to-a-database"><i class="fa fa-check"></i><b>12.1</b> Committing changes to a database</a></li>
+<li class="chapter" data-level="12.2" data-path="inserting-and-updating-data.html"><a href="inserting-and-updating-data.html#truncate-dont-drop"><i class="fa fa-check"></i><b>12.2</b> Truncate, don't drop</a></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="performance-and-integrity.html"><a href="performance-and-integrity.html"><i class="fa fa-check"></i><b>13</b> Performance and integrity</a><ul>
+<li class="chapter" data-level="13.1" data-path="performance-and-integrity.html"><a href="performance-and-integrity.html#indexes"><i class="fa fa-check"></i><b>13.1</b> Indexes</a></li>
+<li class="chapter" data-level="13.2" data-path="performance-and-integrity.html"><a href="performance-and-integrity.html#constraints"><i class="fa fa-check"></i><b>13.2</b> constraints</a></li>
+<li class="chapter" data-level="13.3" data-path="performance-and-integrity.html"><a href="performance-and-integrity.html#optimizing-your-queries"><i class="fa fa-check"></i><b>13.3</b> Optimizing your queries</a><ul>
+<li class="chapter" data-level="13.3.1" data-path="performance-and-integrity.html"><a href="performance-and-integrity.html#inline-views"><i class="fa fa-check"></i><b>13.3.1</b> Inline views</a></li>
+<li class="chapter" data-level="13.3.2" data-path="performance-and-integrity.html"><a href="performance-and-integrity.html#filter-first"><i class="fa fa-check"></i><b>13.3.2</b> Filter First</a></li>
+<li class="chapter" data-level="13.3.3" data-path="performance-and-integrity.html"><a href="performance-and-integrity.html#take-advantage-of-partitions"><i class="fa fa-check"></i><b>13.3.3</b> Take advantage of partitions</a></li>
+<li class="chapter" data-level="13.3.4" data-path="performance-and-integrity.html"><a href="performance-and-integrity.html#explain-plans"><i class="fa fa-check"></i><b>13.3.4</b> Explain plans</a></li>
+<li class="chapter" data-level="13.3.5" data-path="performance-and-integrity.html"><a href="performance-and-integrity.html#leave-some-things-for-r"><i class="fa fa-check"></i><b>13.3.5</b> Leave some things for R</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="14" data-path="shiny-and-oracle.html"><a href="shiny-and-oracle.html"><i class="fa fa-check"></i><b>14</b> Shiny and Oracle</a></li>
+<li class="chapter" data-level="15" data-path="relevance-to-other-databases.html"><a href="relevance-to-other-databases.html"><i class="fa fa-check"></i><b>15</b> Relevance to other databases</a></li>
+<li class="chapter" data-level="16" data-path="big-data-databases.html"><a href="big-data-databases.html"><i class="fa fa-check"></i><b>16</b> Big Data Databases</a><ul>
+<li class="chapter" data-level="16.1" data-path="big-data-databases.html"><a href="big-data-databases.html#what-is-hive-and-how-does-it-compare"><i class="fa fa-check"></i><b>16.1</b> What is hive, and how does it compare</a></li>
+</ul></li>
+<li class="chapter" data-level="17" data-path="what-oracle-r-enterprise-is.html"><a href="what-oracle-r-enterprise-is.html"><i class="fa fa-check"></i><b>17</b> What Oracle R Enterprise is</a><ul>
+<li class="chapter" data-level="17.1" data-path="what-oracle-r-enterprise-is.html"><a href="what-oracle-r-enterprise-is.html#loading-ore"><i class="fa fa-check"></i><b>17.1</b> Loading ORE</a></li>
+<li class="chapter" data-level="17.2" data-path="what-oracle-r-enterprise-is.html"><a href="what-oracle-r-enterprise-is.html#pushing-r-computation-to-the-database"><i class="fa fa-check"></i><b>17.2</b> Pushing R computation to the database</a></li>
+<li class="chapter" data-level="17.3" data-path="what-oracle-r-enterprise-is.html"><a href="what-oracle-r-enterprise-is.html#ore-build-in-algorithms"><i class="fa fa-check"></i><b>17.3</b> ORE build-in algorithms</a></li>
+<li class="chapter" data-level="17.4" data-path="what-oracle-r-enterprise-is.html"><a href="what-oracle-r-enterprise-is.html#calling-r-from-sql"><i class="fa fa-check"></i><b>17.4</b> Calling R from SQL</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Data analysis with R and Oracle</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="what-oracle-r-enterprise-is" class="section level1">
+<h1><span class="header-section-number">Chapter 17</span> What Oracle R Enterprise is</h1>
+<p>Oracle R Enterprise (ORE) is a collection of utilities that let you write and run R code in the database. Until recently this was an expensive option, but starting in 2020 no licensing is needed.</p>
+<p>ORE consists of Oracle's own R distribution (which is lagging behind the official R version), an R library (also named ORE) which gives easy integration with database resources like tables and more, and some new PL/SQL functions that let you create, invoke and return the output from R functions.</p>
+<p>I will try to give examples of two different ways of using ORE: 1. Using ORE from R, as a way to push statistical computations to the database 2. Calling R from SQL, enabling you to return an R dataframe from a SELECT statement, or simply creating a view that returns the result of an R function.</p>
+<div id="loading-ore" class="section level2">
+<h2><span class="header-section-number">17.1</span> Loading ORE</h2>
+<p>We will take a shortcut here, and use the Oracle BigData Lite virtual machine. This allows us to skip a lot of installation and configuration, focusing on using the library.</p>
+<p>Installing and loading ORE is simple and unsurprising:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#install.packages(&quot;ORE&quot;)</span>
+<span class="kw">library</span>(ORE)
+
+<span class="kw">ore.connect</span>(<span class="dt">user =</span> <span class="st">&quot;moviedemo&quot;</span>, <span class="dt">sid =</span> <span class="st">&quot;orcl&quot;</span>, <span class="dt">host =</span> <span class="st">&quot;localhost&quot;</span>, 
+            <span class="dt">password =</span> <span class="st">&quot;welcome1&quot;</span>, <span class="dt">port =</span> <span class="dv">1521</span>, <span class="dt">all=</span><span class="ot">TRUE</span>)</code></pre></div>
+<pre><code>## Warning: table &quot;MOVIEDEMO&quot;.&quot;CUSTOMER&quot; contains unsupported data types</code></pre>
+<pre><code>## Warning: table &quot;MOVIEDEMO&quot;.&quot;PROSPECTS&quot; contains unsupported data types</code></pre>
+<pre><code>## Warning: table &quot;MOVIEDEMO&quot;.&quot;CUSTOMER_RFM&quot; contains unsupported data types</code></pre>
+<pre><code>## Warning: table &quot;MOVIEDEMO&quot;.&quot;IRIS_PREDICT&quot; contains unsupported data types</code></pre>
+<p>The arguments needed to connect to the database are mostly unsurprising, but it is worth noting that ORE can connect to both oracle and Hive (oracle is the default), and there is no default port number - which is why we needed to specify it with the <code>port</code> argument. The <code>all=TRUE</code> argument specifies to load a reference to all database objects. This is nice when your schema is relatively small, but comes at a performance cost if your schema is large.</p>
+<p>After connecting, database tables and views should be directly accessible from R. You can test this by running</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(CUSTOMER_SEGMENT)</code></pre></div>
+<pre><code>##   SEGMENT_ID     NAME                                                            DESCRIPTION
+## 1          1 Segment1                                               Young People - AGE &lt;= 21
+## 2          2 Segment2 &quot;DINKS - Double Income No Kids - 21&lt;AGE&lt;40, Married, Household_size=2&quot;
+## 3          3 Segment3                   &quot;Married with Children -  21&lt;AGE&lt;40, Married, HHS&gt;2&quot;
+## 4          4 Segment4                               &quot;Single Male -  21&lt;AGE&lt;40, Single, Male&quot;
+## 5          5 Segment5                           &quot;Single Female -  21&lt;AGE&lt;40, Single, Female&quot;
+## 6          6 Segment6                                       &quot;Midage Male - 40&lt;=AGE&lt;55, Male&quot;</code></pre>
+<p><code>CUSTOMER_SEGMENT</code> is a table in the <code>moviedemo</code> scema that we connected with.</p>
+</div>
+<div id="pushing-r-computation-to-the-database" class="section level2">
+<h2><span class="header-section-number">17.2</span> Pushing R computation to the database</h2>
+</div>
+<div id="ore-build-in-algorithms" class="section level2">
+<h2><span class="header-section-number">17.3</span> ORE build-in algorithms</h2>
+<p>ORE comes with a number of different machine-learning algorithms (although nothing fancy). You will probably struggle to find anything ORE can do that R can't, but the library pushes computation to the database - which can give a performance improvement.</p>
+<p>One such algorithm is KMeans, which assigns each observation to a cluster. A common example is customer segmentation. You have a number of customers, and you may have some basic information about them like their age, gender, location, and purchasing history. Now, you want to send an email to each, advertising newly arrived products. A modern data scientist may see a supervised machine learning model as a solution, but a less technical way of doing this is to create assign each customer to a group, figure out some commonalities in each group, and send each group an email focusing on some of the</p>
+<p>To illustrate the intuitive usefulness of clustering, take a look at how the iris dataset is distributed:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(iris<span class="op">$</span>Sepal.Length, iris<span class="op">$</span>Petal.Length, <span class="dt">col=</span>iris<span class="op">$</span>Species)</code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-43-1.png" width="672" /></p>
+<p>The color coding represents species, and it is obvious that plants of the same species tend to have similar lengths for sepals and petals.</p>
+<p>For the sake of variation, we will demonstrate OREs K-means implementation using the <code>CUSTOMER_V</code> table.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(CUSTOMER_V)</code></pre></div>
+<pre><code>## Warning: ORE object has no unique key - using random order
+
+## Warning: ORE object has no unique key - using random order</code></pre>
+<pre><code>##   CUST_ID  LAST_NAME FIRST_NAME    STREET_ADDRESS POSTAL_CODE CITY_ID        CITY STATE_PROVINCE_ID STATE_PROVINCE COUNTRY_ID
+## 1   1e+07     Re****     Laurel    61 LONDON ROAD       PO8 8   52033    COWPLAIN              1113           &lt;NA&gt;        129
+## 2   1e+07     Su****       Otto              &lt;NA&gt;        &lt;NA&gt;   49239 Kitanoshita              1112          Tokyo        128
+## 3   1e+07 Kl********    Ta-Heng    FAIRFAX STREET       CV1 5   55742    COVENTRY              1113           &lt;NA&gt;        129
+## 4   1e+07     Ro**** Bhadrabuja   27 DUNDERG ROAD      BT51 4   37386   MACOSQUIN              1113           &lt;NA&gt;        129
+## 5   1e+07    Ly*****    Candrin 1 COMMERCIAL ROAD       EX7 9  110601     DAWLISH              1113           &lt;NA&gt;        129
+## 6   1e+07   Sr******    Motilal    12 ANTONY ROAD      PL11 2   89177    TORPOINT              1113           &lt;NA&gt;        129
+##          COUNTRY CONTINENT_ID CONTINENT AGE COMMUTE_DISTANCE CREDIT_BALANCE   EDUCATION                             EMAIL FULL_TIME GENDER
+## 1 United Kingdom           14    Europe  30                1             21   Bachelors      Laurel.Recker@oraclemail.com       Yes   Male
+## 2          Japan           16      Asia  27               40            206     Masters        Otto.Suzuki@oraclemail.com       Yes   Male
+## 3 United Kingdom           14    Europe  44                6            136 High School Ta-Heng.Klossovsky@oraclemail.com       Yes   Male
+## 4 United Kingdom           14    Europe  65               18             66   Bachelors  Bhadrabuja.Rovigo@oraclemail.com       Yes   Male
+## 5 United Kingdom           14    Europe  49               21             36   Bachelors    Candrin.Lyakhov@oraclemail.com       Yes   Male
+## 6 United Kingdom           14    Europe  50               16            165   Bachelors   Motilal.Sreedhar@oraclemail.com       Yes   Male
+##   HOUSEHOLD_SIZE INCOME         INCOME_LEVEL INSUFF_FUNDS_INCIDENTS     JOB_TYPE LATE_MORT_RENT_PMTS MARITAL_STATUS MORTGAGE_AMT NUM_CARS
+## 1              1 108625  E: 90,000 - 109,999                      0     Services                   0              S       190000        1
+## 2              1  93770  E: 90,000 - 109,999                      1 Professional                   1              S            0        1
+## 3              1  11851      A: Below 30,000                      1     Business                   1              S       140000        1
+## 4              2  54651   C: 50,000 - 69,999                      1     Business                   0              M         6202        2
+## 5              2 118261 F: 110,000 - 129,999                      0     Business                   0              M        10000        1
+## 6              1 116367 F: 110,000 - 129,999                      0     Business                   0              S            0        1
+##   NUM_MORTGAGES     PET PROMOTION_RESPONSE RENT_OWN SEG WORK_EXPERIENCE YRS_CURRENT_EMPLOYER YRS_CUSTOMER YRS_RESIDENCE COUNTRY_CODE
+## 1             1     Dog                  0      Own   4               2                    2            4             5           GB
+## 2             0 Unknown                  0     Rent   4               8                    2            5             2           JP
+## 3             1 Unknown                  0      Own   6              18                    3            4            16           GB
+## 4             1     Dog                  0      Own   8              28                   20            2             2           GB
+## 5             1 Unknown                  0      Own   6              25                    4            1             1           GB
+## 6             0 Unknown                  0     Rent   6              28                    6            1             1           GB</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">feature_list &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;INCOME&quot;</span>, <span class="st">&quot;MORTGAGE_AMT&quot;</span>, <span class="st">&quot;NUM_CARS&quot;</span>, <span class="st">&quot;NUM_MORTGAGES&quot;</span>, <span class="st">&quot;WORK_EXPERIENCE&quot;</span>,
+                  <span class="st">&quot;YRS_CURRENT_EMPLOYER&quot;</span>, <span class="st">&quot;YRS_CUSTOMER&quot;</span>, <span class="st">&quot;YRS_RESIDENCE&quot;</span>, <span class="st">&quot;LATE_MORT_RENT_PMTS&quot;</span>,
+                  <span class="st">&quot;INSUFF_FUNDS_INCIDENTS&quot;</span>)
+
+
+kmmodel &lt;-<span class="st"> </span><span class="kw">ore.odmKMeans</span>(<span class="op">~</span>., CUSTOMER_V[, feature_list] , <span class="dt">num.centers=</span><span class="dv">3</span>, <span class="dt">iterations =</span> <span class="dv">10</span>)</code></pre></div>
+<p>The <code>ore.odmKMeans</code> function takes the formula as the first argument and dataset as the second argument, followed by the desired number of clusters (3) and the number of iterations the algorithm should do (10).</p>
+<p>The resulting model can be used to associate new observations with existing clusters, or we can simply take a note of the cluster centers available as a dataframe in <code>kmmodel$clusters</code>.</p>
+</div>
+<div id="calling-r-from-sql" class="section level2">
+<h2><span class="header-section-number">17.4</span> Calling R from SQL</h2>
+<p>Oracle reuses the concept of <em>scripts</em> when interacting with R from SQL, allowing you to register a &quot;script&quot; that is basically an R function that takes input and returns output like any other function. The challenge and potential for confusion lies in mapping this input and output between SQL and R.</p>
+<p>In our example, we return to the iris dataset (yawn), and create a prediction model that we can access from SQL and even represent as a view for convenience.</p>
+<p>In order for this to be a workable end-to-end example, we have to start with a little data preparation, including writing the iris dataset to the DB. If you haven't already, remember to connect to the database using the <code>ore.connect</code> function.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># making iris visible, and DB-izing variable names</span>
+iris_to_db &lt;-<span class="st"> </span>iris
+<span class="kw">names</span>(iris_to_db) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;SEPAL_LENGTH&quot;</span>, <span class="st">&quot;SEPAL_WIDTH&quot;</span>, <span class="st">&quot;PETAL_LENGTH&quot;</span>, <span class="st">&quot;PETAL_WIDTH&quot;</span>, <span class="st">&quot;SPECIES&quot;</span>)
+
+
+
+<span class="cf">if</span> (<span class="kw">ore.exists</span>(<span class="st">&quot;IRIS_RC&quot;</span>)) {
+  <span class="kw">ore.drop</span>(<span class="st">&quot;IRIS_RC&quot;</span>)
+}
+
+<span class="kw">ore.create</span>(iris_to_db, <span class="dt">table=</span><span class="st">&quot;IRIS_RC&quot;</span>)</code></pre></div>
+<p>OK, so we have renamed some column names for convenience, and created a table <code>IRIS_R</code> in the DB. I might not have shown the <code>ore.create</code> function before, but it does what it suggest - it creates a table in the db. Other than that one command though, we are not seeing anything new so far. That is about to change.</p>
+<p>Our ultimate goal is to be able to call on a prediction model from Oracle, but in order to do that we need a place to store the model - a place Oracle can access. Oracle has created such an &quot;object storage&quot; for R, and we can save objects there through the <code>ore.save</code> command. Let's try creating the model we want and saving it.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">iris_species_model &lt;-<span class="st"> </span><span class="kw">ore.odmNB</span>(SPECIES <span class="op">~</span><span class="st"> </span>SEPAL_WIDTH <span class="op">+</span><span class="st"> </span>PETAL_LENGTH <span class="op">+</span><span class="st"> </span>PETAL_WIDTH <span class="op">+</span><span class="st"> </span>SEPAL_LENGTH, IRIS_RC)
+
+<span class="kw">ore.save</span>(iris_species_model, <span class="dt">name=</span><span class="st">&#39;supervised_models&#39;</span>, <span class="dt">list=</span><span class="st">&#39;iris_species_model&#39;</span>, <span class="dt">overwrite =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<p>The <code>name</code> argument specifies the <em>environment</em> we want to save the model to - you can basically think of it as a folder, and the <code>list</code> argument is a list (<em>ahem</em> vector <em>ahem</em>) of the names you want to assign. If you are saving multiple elements, you can pass multiple objects before the named arguments. Make sure the number of objects and length of the list matches, and make sure the order is correct.</p>
+<p>We have now created an R model and assigned it to the R-variable <code>iris_species_model</code>, as one typically does in R. Next, we saved this model to Oracle, using the name <code>iris_species_model</code>. In summary, we now have the same model, with the same name, both in R and in Oracle. The difference is that the model in Oracle is persistent, while the model in R disappears when you shut down R (granted R does a good job at saving the R environment for you, but you get the point).</p>
+<p>Now, we are halfway - but this is the most difficult part: We need to register a script (function) that gives us the predictions from SQL.</p>
+<p>We haven't talked about the details of what we want yet - what exactly is the output we want, and what is the input the model needs? There are many ways to skin this cat and our chosen approach might not be the most efficient one, but it shows some of the hoops you need to jump through. We are passing the function an entire dataframe, together with a reference to the model we are using. The function returns a dataframe with the predictions.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">iris_species_predict &lt;-<span class="st"> </span><span class="cf">function</span>(dat, ds, obj) {
+
+  <span class="kw">ore.load</span>(<span class="dt">name=</span>ds, <span class="dt">list=</span>obj)
+  mod &lt;-<span class="st"> </span><span class="kw">get</span>(obj) 
+  dat &lt;-<span class="st"> </span><span class="kw">ore.frame</span>(dat)
+
+  prd &lt;-<span class="st"> </span><span class="kw">predict</span>(mod, dat,<span class="dt">supplemental.cols=</span><span class="st">&quot;SPECIES&quot;</span>)
+  <span class="kw">ore.pull</span>(prd)
+}</code></pre></div>
+<p>Our function has to work within some constraints.</p>
+<ol style="list-style-type: decimal">
+<li><p>The dataset that is being passed has to originate from a table in the database, and we use <code>ore.frame</code> to convert the input dataset to a &quot;proper&quot; dataframe that R can work with.</p></li>
+<li><p>In order to load the model we saved (named <code>iris_species_model</code>), we need a reference both to the environment in which the model is stored and the name of the model. the <code>ore.load</code>. The <code>ore.load</code> command largely mirrors the native <code>load</code> command.</p></li>
+</ol>
+<p>Once this is done, we can use the model we loaded to predict the species we want, and return it as a dataframe.</p>
+<p>So far so good. It's an R function, there is a little bit of legwork involved in loading the model and handling the incoming data from SQL, but mostly it is recognizible. And we can save this function to Oracle as a script.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ore.scriptCreate</span>(<span class="st">&#39;iris_species_predict&#39;</span>, iris_species_predict, <span class="dt">overwrite =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<p>To recap, we have: 1. Trained a model that predicts iris species. 2. Saved that model to Oracle, so that it is accessible to our <code>moviedemo</code> database user and can be loaded any time. 3. Created a function that uses the model to predict species given an incoming dataset 4. registered this function as a script in Oracle.</p>
+<p>We have now done what we can in R, the next step is to bring this together from SQL.</p>
+<p>In SQL, we can call this script using the <code>rqTableEval</code> function. The input to this function is fairly involved, not to mention unintuitive. We ha</p>
+<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql">
+<span class="kw">SELECT</span> * <span class="kw">FROM</span> <span class="kw">table</span>(rqTableEval(
+  <span class="kw">cursor</span>(<span class="kw">SELECT</span> * <span class="kw">FROM</span> IRIS_RC),
+  <span class="kw">cursor</span>(<span class="kw">SELECT</span> <span class="st">&#39;supervised_models&#39;</span> <span class="kw">as</span> <span class="ot">&quot;ds&quot;</span>, <span class="st">&#39;iris_species_model&#39;</span> <span class="kw">as</span> <span class="ot">&quot;obj&quot;</span>, <span class="dv">1</span> <span class="kw">as</span> <span class="ot">&quot;ore.connect&quot;</span> <span class="kw">FROM</span> dual),
+  <span class="st">&#39;SELECT 1 AS SETOSA_PROB, 1 AS VERSICOLOR_PROB, 1 AS VIRGINICA_PROB, CAST(</span><span class="ch">&#39;&#39;</span><span class="st">a</span><span class="ch">&#39;&#39;</span><span class="st"> AS VARCHAR(255)) AS SPECIES, CAST(</span><span class="ch">&#39;&#39;</span><span class="st">b</span><span class="ch">&#39;&#39;</span><span class="st"> AS VARCHAR(255)) AS PREDICTED_SPECIES FROM dual&#39;</span>, 
+  <span class="st">&#39;iris_species_predict&#39;</span>)
+  )
+<span class="kw">WHERE</span> species!=predicted_species</code></pre></div>
+<div class="knitsql-table">
+<table>
+<caption><span id="tab:unnamed-chunk-50">Table 17.1: </span>8 records</caption>
+<thead>
+<tr class="header">
+<th align="right">SETOSA_PROB</th>
+<th align="right">VERSICOLOR_PROB</th>
+<th align="right">VIRGINICA_PROB</th>
+<th align="left">SPECIES</th>
+<th align="left">PREDICTED_SPECIES</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">0</td>
+<td align="right">0.24</td>
+<td align="right">0.76</td>
+<td align="left">versicolor</td>
+<td align="left">virginica</td>
+</tr>
+<tr class="even">
+<td align="right">0</td>
+<td align="right">0.00</td>
+<td align="right">1.00</td>
+<td align="left">versicolor</td>
+<td align="left">virginica</td>
+</tr>
+<tr class="odd">
+<td align="right">0</td>
+<td align="right">0.44</td>
+<td align="right">0.56</td>
+<td align="left">versicolor</td>
+<td align="left">virginica</td>
+</tr>
+<tr class="even">
+<td align="right">0</td>
+<td align="right">0.44</td>
+<td align="right">0.56</td>
+<td align="left">versicolor</td>
+<td align="left">virginica</td>
+</tr>
+<tr class="odd">
+<td align="right">0</td>
+<td align="right">0.24</td>
+<td align="right">0.76</td>
+<td align="left">versicolor</td>
+<td align="left">virginica</td>
+</tr>
+<tr class="even">
+<td align="right">0</td>
+<td align="right">1.00</td>
+<td align="right">0.00</td>
+<td align="left">virginica</td>
+<td align="left">versicolor</td>
+</tr>
+<tr class="odd">
+<td align="right">0</td>
+<td align="right">0.84</td>
+<td align="right">0.16</td>
+<td align="left">virginica</td>
+<td align="left">versicolor</td>
+</tr>
+<tr class="even">
+<td align="right">0</td>
+<td align="right">0.84</td>
+<td align="right">0.16</td>
+<td align="left">virginica</td>
+<td align="left">versicolor</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>We are constructing a table (as indicating by the <code>table</code> function that wraps it all), inside it is the <code>rqTableEval</code> function that takes three arguments (not the same three as the R function, mind you...). In order, the inputs are:</p>
+<ol style="list-style-type: decimal">
+<li><p>The input dataset, in the form of a SELECT statement from the <code>IRIS_R</code> table we created. If we cared about the model itself we would hav split the data into a train and test set, but we are simply showing the technical bits for now. All wrapped in a cursor.</p></li>
+<li><p>The additional arguments, <code>ds</code> and <code>obj</code>, in the form of simple strings selected from dual. Again, inside a cursor.</p></li>
+<li><p>A mock SELECT statement indicating the column types of the return dataset, formatted as a long string. This is unintuitive at best and it seems weird that Oracle can talk to R about everything except the structure of the returning data frame, but apparently that is where we are at. In detail we are expecting one numerical column with a probability for each of the species, so we select 1 (as a stand-in for a number) and name it for each of the three species. We also expect two columns, the actual and predicted species, as text columns. For text we need to make sure the column is big enough, so we select some letter and explicitly cast it as <code>VARCHAR(255)</code> which we know will be more than enough for the species name.</p></li>
+</ol>
+<p>This query can now be run, and you should get in return the same dataset you get when you call <code>predict</code> directly in R.</p>
+<p>Congratulations. Save for the illegible syntax, you have now seamlessly combined R and SQL.</p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="big-data-databases.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="references.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/rstudio/bookdown-demo/edit/master/16-Oracle-R-Enterprise.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["bookdown-demo.pdf", "bookdown-demo.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

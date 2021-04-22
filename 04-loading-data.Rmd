@@ -1,0 +1,58 @@
+
+# Loading our data {#loading-data}
+If you are using the VM, you will already have available some data to play around with. However, we are going to use a different dataset for most of our analysis. Kaggle hosts a dataset containing data from an ecommerce-site, which is both interesting and quite conductive to learning advanced SQL.
+
+In order to download the data you need a Kaggle account, but once that is set up, you can download the data from https://www.kaggle.com/carrie1/ecommerce-data/downloads/ecommerce-data.zip.
+
+In order to load it into the SQL database, we will first load it into R as a regular dataframe and then write it to a table.
+
+```{r dbdrvx, include=FALSE, eval=TRUE}
+
+library(ROracle)
+drv <- dbDriver("Oracle")
+host <- "localhost"
+port <- 1521
+sid <- "orcl"
+
+connect.string <- paste(
+  "(DESCRIPTION=",
+  "(ADDRESS=(PROTOCOL=tcp)(HOST=", host, ")(PORT=", port, "))",
+  "(CONNECT_DATA=(SID=", sid, ")))", sep = "")
+
+con <- dbConnect(drv, username="moviedemo", password="welcome1", dbname=connect.string)
+tickercon <- dbConnect(drv, username="pmuser", password="pmuser", dbname=connect.string)
+
+```
+
+
+```{r readcsv}
+trx <- read.csv("data/online_transactions.csv", stringsAsFactors = F)
+trx$InvoiceDate <- strptime(x = trx$InvoiceDate, format = "%m/%d/%Y %H:%M")
+names(trx) <- lapply(names(trx), toupper)
+```
+
+The `InvoiceDate` is a timestamp but R reads it as a string instead of a date, so we needed to convert it with the `strptime` command. We also convert all variable names to uppercase, as Oracle seems strangely sensitive to this (SQL is not usually case-sensitive).
+
+Writing the dataframe to a new table in the `moviedemo` database can be done with `dbWriteTable`, a function in the `ROracle` library that needs only three arguments: the database connection object, a new table name, and the name of our dataframe.
+
+```{r insertdata, include=TRUE, eval=FALSE}
+dbWriteTable(connection, "TRX0", trx)
+```
+
+Unfortunately, the date format is lost from R to Oracle so we need to do a little data transformation in SQL as well. We do want the date field as an actual date, even though dates can be a hassle (like now), they prove very valuable for anyone who invests some time in learning about them.
+
+This statement could have been executed from R, but using the SQL Workbench is probably just as nice.
+
+```sql
+CREATE TABLE trx AS (
+SELECT INVOICENO, 
+  STOCKCODE, 
+  DESCRIPTION, 
+  QUANTITY, 
+  TO_DATE(INVOICEDATE, 'YYYY-MM-DD HH24:MI:SS') AS INVOICEDATE, 
+  UNITPRICE, 
+  CUSTOMERID,
+  COUNTRY
+FROM moviedemo.trx0
+)
+```

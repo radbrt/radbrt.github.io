@@ -1,0 +1,40 @@
+--- 
+title: "Data analysis with R and Oracle"
+author: "Henning Holgersen"
+date: "`r Sys.Date()`"
+site: bookdown::bookdown_site
+output: bookdown::gitbook
+documentclass: book
+bibliography: [book.bib, packages.bib]
+biblio-style: apalike
+link-citations: yes
+description: "Oracle is one of the most common database systems used in the business world. For analysts, an Oracle database is often their data souce. Being able to effectively query databases, and leave to the database what the database is best at and R what R is best at, can speed up analysis and reduce computational overhead."
+---
+
+<!-- ---  -->
+<!-- title: "A Minimal Book Example" -->
+<!-- author: "Yihui Xie" -->
+<!-- date: "`r Sys.Date()`" -->
+<!-- site: bookdown::bookdown_site -->
+<!-- output: bookdown::gitbook -->
+<!-- documentclass: book -->
+<!-- bibliography: [book.bib, packages.bib] -->
+<!-- biblio-style: apalike -->
+<!-- link-citations: yes -->
+<!-- github-repo: rstudio/bookdown-demo -->
+<!-- description: "This is a minimal example of using the bookdown package to write a book. The output format for this example is bookdown::gitbook." -->
+<!-- --- -->
+
+
+# Who is this book for?
+
+You are probably employed as an analyst at some company, where the IT department has the production data in an Oracle database. You are familiar with R, and have figured out that loading the data you need to analyze from the database to R is the most effective way for you to do your job.
+
+## What will the book cover?
+
+This book will go through systems requirements for connecting to Oracle from R, how to retrieve data from the database, and how to write custom queries. It outlines what types of tasks the database excels at, and in which use cases the processing is best left to R.
+
+## What does the book not cover?
+
+A lot of great work has been done in recent years on database connectivity from R. Perhaps most notably, the `dbplyr` package does an excellent job at letting you as an analyst write tidy R code, and have the queries executed by the database while you remain blissfully ignorant of what happens under the hood. If you are proficient in R and don't have any interest in learning SQL, skipping this book and learning `dbplyr` is probably a better use of your time.
+

@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 11 Row pattern matching | Data analysis with R and Oracle</title>
+  <meta name="description" content="Oracle is one of the most common database systems used in the business world. For analysts, an Oracle database is often their data souce. Being able to effectively query databases, and leave to the database what the database is best at and R what R is best at, can speed up analysis and reduce computational overhead." />
+  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 11 Row pattern matching | Data analysis with R and Oracle" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="Oracle is one of the most common database systems used in the business world. For analysts, an Oracle database is often their data souce. Being able to effectively query databases, and leave to the database what the database is best at and R what R is best at, can speed up analysis and reduce computational overhead." />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 11 Row pattern matching | Data analysis with R and Oracle" />
+  
+  <meta name="twitter:description" content="Oracle is one of the most common database systems used in the business world. For analysts, an Oracle database is often their data souce. Being able to effectively query databases, and leave to the database what the database is best at and R what R is best at, can speed up analysis and reduce computational overhead." />
+  
+
+<meta name="author" content="Henning Holgersen" />
+
+
+<meta name="date" content="2021-04-22" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="statistical-functions.html"/>
+<link rel="next" href="inserting-and-updating-data.html"/>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">A Minimal Book Example</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Who is this book for?</a><ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#what-will-the-book-cover"><i class="fa fa-check"></i><b>1.1</b> What will the book cover?</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#what-does-the-book-not-cover"><i class="fa fa-check"></i><b>1.2</b> What does the book not cover?</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>2</b> Introduction</a><ul>
+<li class="chapter" data-level="2.1" data-path="intro.html"><a href="intro.html#what-analysts-need"><i class="fa fa-check"></i><b>2.1</b> What analysts need</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="system-setup.html"><a href="system-setup.html"><i class="fa fa-check"></i><b>3</b> System setup</a><ul>
+<li class="chapter" data-level="3.1" data-path="system-setup.html"><a href="system-setup.html#follow-along-with-the-bigdata-lite-vm-or-xe18-on-docker"><i class="fa fa-check"></i><b>3.1</b> Follow along with the BigData Lite VM or XE18 on Docker</a></li>
+<li class="chapter" data-level="3.2" data-path="system-setup.html"><a href="system-setup.html#a-production-environment"><i class="fa fa-check"></i><b>3.2</b> A production environment</a><ul>
+<li class="chapter" data-level="3.2.1" data-path="system-setup.html"><a href="system-setup.html#installing-drivers"><i class="fa fa-check"></i><b>3.2.1</b> Installing drivers</a></li>
+<li class="chapter" data-level="3.2.2" data-path="system-setup.html"><a href="system-setup.html#installing-rstudio"><i class="fa fa-check"></i><b>3.2.2</b> Installing Rstudio</a></li>
+<li class="chapter" data-level="3.2.3" data-path="system-setup.html"><a href="system-setup.html#installing-sql-workbench"><i class="fa fa-check"></i><b>3.2.3</b> Installing SQL Workbench</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="system-setup.html"><a href="system-setup.html#connecting-to-a-database-from-r"><i class="fa fa-check"></i><b>3.3</b> Connecting to a database from R</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="a-relational-state-of-mind.html"><a href="a-relational-state-of-mind.html"><i class="fa fa-check"></i><b>4</b> A relational state of mind</a><ul>
+<li class="chapter" data-level="4.1" data-path="a-relational-state-of-mind.html"><a href="a-relational-state-of-mind.html#an-illustrated-example-with-movie-data"><i class="fa fa-check"></i><b>4.1</b> An illustrated example with movie-data</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="loading-data.html"><a href="loading-data.html"><i class="fa fa-check"></i><b>5</b> Loading our data</a></li>
+<li class="chapter" data-level="6" data-path="basic-sql.html"><a href="basic-sql.html"><i class="fa fa-check"></i><b>6</b> Basic SQL</a><ul>
+<li class="chapter" data-level="6.1" data-path="basic-sql.html"><a href="basic-sql.html#select-from-where-starting-our-exploration"><i class="fa fa-check"></i><b>6.1</b> <code>SELECT</code> <code>FROM</code> <code>WHERE</code>? Starting our exploration</a><ul>
+<li class="chapter" data-level="6.1.1" data-path="basic-sql.html"><a href="basic-sql.html#a-quick-glance-at-our-data"><i class="fa fa-check"></i><b>6.1.1</b> A quick glance at our data</a></li>
+<li class="chapter" data-level="6.1.2" data-path="basic-sql.html"><a href="basic-sql.html#simple-aggregates"><i class="fa fa-check"></i><b>6.1.2</b> Aggregating your results</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="basic-sql.html"><a href="basic-sql.html#more-ways-to-join-tables"><i class="fa fa-check"></i><b>6.2</b> More ways to <code>JOIN</code> tables</a></li>
+<li class="chapter" data-level="6.3" data-path="basic-sql.html"><a href="basic-sql.html#a-few-common-gotchas"><i class="fa fa-check"></i><b>6.3</b> A few common gotchas</a><ul>
+<li class="chapter" data-level="6.3.1" data-path="basic-sql.html"><a href="basic-sql.html#missing-values"><i class="fa fa-check"></i><b>6.3.1</b> Missing values</a></li>
+<li class="chapter" data-level="6.3.2" data-path="basic-sql.html"><a href="basic-sql.html#execution-order"><i class="fa fa-check"></i><b>6.3.2</b> Execution order</a></li>
+<li class="chapter" data-level="6.3.3" data-path="basic-sql.html"><a href="basic-sql.html#ansi-and-the-dialects"><i class="fa fa-check"></i><b>6.3.3</b> ANSI and the dialects</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="intermediate-sql-intermediate-sql.html"><a href="intermediate-sql-intermediate-sql.html"><i class="fa fa-check"></i><b>7</b> Intermediate SQL {intermediate-sql}</a><ul>
+<li class="chapter" data-level="7.1" data-path="intermediate-sql-intermediate-sql.html"><a href="intermediate-sql-intermediate-sql.html#create-conditional-statements-with-case-when"><i class="fa fa-check"></i><b>7.1</b> Create conditional statements with <code>CASE WHEN</code></a></li>
+<li class="chapter" data-level="7.2" data-path="intermediate-sql-intermediate-sql.html"><a href="intermediate-sql-intermediate-sql.html#filter-on-aggregates-with-having"><i class="fa fa-check"></i><b>7.2</b> Filter on aggregates with <code>HAVING</code></a></li>
+<li class="chapter" data-level="7.3" data-path="intermediate-sql-intermediate-sql.html"><a href="intermediate-sql-intermediate-sql.html#more-about-limiting-the-result-with-fetch-first"><i class="fa fa-check"></i><b>7.3</b> More about limiting the result with <code>FETCH FIRST</code></a></li>
+<li class="chapter" data-level="7.4" data-path="intermediate-sql-intermediate-sql.html"><a href="intermediate-sql-intermediate-sql.html#simple-convenience-functions"><i class="fa fa-check"></i><b>7.4</b> Simple convenience functions</a><ul>
+<li class="chapter" data-level="7.4.1" data-path="intermediate-sql-intermediate-sql.html"><a href="intermediate-sql-intermediate-sql.html#the-decode-function"><i class="fa fa-check"></i><b>7.4.1</b> The <code>decode</code> function</a></li>
+<li class="chapter" data-level="7.4.2" data-path="intermediate-sql-intermediate-sql.html"><a href="intermediate-sql-intermediate-sql.html#upper-lower"><i class="fa fa-check"></i><b>7.4.2</b> upper / lower</a></li>
+<li class="chapter" data-level="7.4.3" data-path="intermediate-sql-intermediate-sql.html"><a href="intermediate-sql-intermediate-sql.html#substring"><i class="fa fa-check"></i><b>7.4.3</b> substring</a></li>
+<li class="chapter" data-level="7.4.4" data-path="intermediate-sql-intermediate-sql.html"><a href="intermediate-sql-intermediate-sql.html#regular-expressions"><i class="fa fa-check"></i><b>7.4.4</b> Regular expressions</a></li>
+<li class="chapter" data-level="7.4.5" data-path="intermediate-sql-intermediate-sql.html"><a href="intermediate-sql-intermediate-sql.html#dates"><i class="fa fa-check"></i><b>7.4.5</b> Dealing with dates</a></li>
+</ul></li>
+<li class="chapter" data-level="7.5" data-path="intermediate-sql-intermediate-sql.html"><a href="intermediate-sql-intermediate-sql.html#what-we-are-not-going-to-cover"><i class="fa fa-check"></i><b>7.5</b> What we are not going to cover</a><ul>
+<li class="chapter" data-level="7.5.1" data-path="intermediate-sql-intermediate-sql.html"><a href="intermediate-sql-intermediate-sql.html#plsql"><i class="fa fa-check"></i><b>7.5.1</b> PL/SQL</a></li>
+<li class="chapter" data-level="7.5.2" data-path="intermediate-sql-intermediate-sql.html"><a href="intermediate-sql-intermediate-sql.html#the-dbplyr-library"><i class="fa fa-check"></i><b>7.5.2</b> the <code>dbplyr</code> library</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="aggregation-functions-aggregation-functions.html"><a href="aggregation-functions-aggregation-functions.html"><i class="fa fa-check"></i><b>8</b> Aggregation functions {aggregation-functions}</a><ul>
+<li class="chapter" data-level="8.1" data-path="aggregation-functions-aggregation-functions.html"><a href="aggregation-functions-aggregation-functions.html#median-and-quantiles"><i class="fa fa-check"></i><b>8.1</b> Median and quantiles</a></li>
+<li class="chapter" data-level="8.2" data-path="aggregation-functions-aggregation-functions.html"><a href="aggregation-functions-aggregation-functions.html#first-values-first-values"><i class="fa fa-check"></i><b>8.2</b> First values {first-values}</a></li>
+<li class="chapter" data-level="8.3" data-path="aggregation-functions-aggregation-functions.html"><a href="aggregation-functions-aggregation-functions.html#aggregating-text"><i class="fa fa-check"></i><b>8.3</b> Aggregating text</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="analytical-functions.html"><a href="analytical-functions.html"><i class="fa fa-check"></i><b>9</b> Analytical functions</a><ul>
+<li class="chapter" data-level="9.1" data-path="analytical-functions.html"><a href="analytical-functions.html#windows"><i class="fa fa-check"></i><b>9.1</b> Over the partitions and far away</a></li>
+<li class="chapter" data-level="9.2" data-path="analytical-functions.html"><a href="analytical-functions.html#models"><i class="fa fa-check"></i><b>9.2</b> Models</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="statistical-functions.html"><a href="statistical-functions.html"><i class="fa fa-check"></i><b>10</b> Statistical functions</a><ul>
+<li class="chapter" data-level="10.1" data-path="statistical-functions.html"><a href="statistical-functions.html#covariance-revisitng-quantity-vs-unitprice"><i class="fa fa-check"></i><b>10.1</b> Covariance: Revisitng quantity vs unitprice</a></li>
+<li class="chapter" data-level="10.2" data-path="statistical-functions.html"><a href="statistical-functions.html#regression"><i class="fa fa-check"></i><b>10.2</b> Regression</a></li>
+<li class="chapter" data-level="10.3" data-path="statistical-functions.html"><a href="statistical-functions.html#t-tests"><i class="fa fa-check"></i><b>10.3</b> T-tests</a></li>
+<li class="chapter" data-level="10.4" data-path="statistical-functions.html"><a href="statistical-functions.html#kolmogorov-smirnoff-tests"><i class="fa fa-check"></i><b>10.4</b> Kolmogorov-Smirnoff tests</a></li>
+<li class="chapter" data-level="10.5" data-path="statistical-functions.html"><a href="statistical-functions.html#and-more..."><i class="fa fa-check"></i><b>10.5</b> And more...</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="row-pattern-matching.html"><a href="row-pattern-matching.html"><i class="fa fa-check"></i><b>11</b> Row pattern matching</a><ul>
+<li class="chapter" data-level="11.1" data-path="row-pattern-matching.html"><a href="row-pattern-matching.html#a-simpleish-example"><i class="fa fa-check"></i><b>11.1</b> A simple(ish) example</a></li>
+<li class="chapter" data-level="11.2" data-path="row-pattern-matching.html"><a href="row-pattern-matching.html#a-more-involved-example"><i class="fa fa-check"></i><b>11.2</b> A more involved example</a><ul>
+<li class="chapter" data-level="11.2.1" data-path="row-pattern-matching.html"><a href="row-pattern-matching.html#importing-and-cleaning"><i class="fa fa-check"></i><b>11.2.1</b> Importing and cleaning</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="inserting-and-updating-data.html"><a href="inserting-and-updating-data.html"><i class="fa fa-check"></i><b>12</b> Inserting and updating data</a><ul>
+<li class="chapter" data-level="12.1" data-path="inserting-and-updating-data.html"><a href="inserting-and-updating-data.html#committing-changes-to-a-database"><i class="fa fa-check"></i><b>12.1</b> Committing changes to a database</a></li>
+<li class="chapter" data-level="12.2" data-path="inserting-and-updating-data.html"><a href="inserting-and-updating-data.html#truncate-dont-drop"><i class="fa fa-check"></i><b>12.2</b> Truncate, don't drop</a></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="performance-and-integrity.html"><a href="performance-and-integrity.html"><i class="fa fa-check"></i><b>13</b> Performance and integrity</a><ul>
+<li class="chapter" data-level="13.1" data-path="performance-and-integrity.html"><a href="performance-and-integrity.html#indexes"><i class="fa fa-check"></i><b>13.1</b> Indexes</a></li>
+<li class="chapter" data-level="13.2" data-path="performance-and-integrity.html"><a href="performance-and-integrity.html#constraints"><i class="fa fa-check"></i><b>13.2</b> constraints</a></li>
+<li class="chapter" data-level="13.3" data-path="performance-and-integrity.html"><a href="performance-and-integrity.html#optimizing-your-queries"><i class="fa fa-check"></i><b>13.3</b> Optimizing your queries</a><ul>
+<li class="chapter" data-level="13.3.1" data-path="performance-and-integrity.html"><a href="performance-and-integrity.html#inline-views"><i class="fa fa-check"></i><b>13.3.1</b> Inline views</a></li>
+<li class="chapter" data-level="13.3.2" data-path="performance-and-integrity.html"><a href="performance-and-integrity.html#filter-first"><i class="fa fa-check"></i><b>13.3.2</b> Filter First</a></li>
+<li class="chapter" data-level="13.3.3" data-path="performance-and-integrity.html"><a href="performance-and-integrity.html#take-advantage-of-partitions"><i class="fa fa-check"></i><b>13.3.3</b> Take advantage of partitions</a></li>
+<li class="chapter" data-level="13.3.4" data-path="performance-and-integrity.html"><a href="performance-and-integrity.html#explain-plans"><i class="fa fa-check"></i><b>13.3.4</b> Explain plans</a></li>
+<li class="chapter" data-level="13.3.5" data-path="performance-and-integrity.html"><a href="performance-and-integrity.html#leave-some-things-for-r"><i class="fa fa-check"></i><b>13.3.5</b> Leave some things for R</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="14" data-path="shiny-and-oracle.html"><a href="shiny-and-oracle.html"><i class="fa fa-check"></i><b>14</b> Shiny and Oracle</a></li>
+<li class="chapter" data-level="15" data-path="relevance-to-other-databases.html"><a href="relevance-to-other-databases.html"><i class="fa fa-check"></i><b>15</b> Relevance to other databases</a></li>
+<li class="chapter" data-level="16" data-path="big-data-databases.html"><a href="big-data-databases.html"><i class="fa fa-check"></i><b>16</b> Big Data Databases</a><ul>
+<li class="chapter" data-level="16.1" data-path="big-data-databases.html"><a href="big-data-databases.html#what-is-hive-and-how-does-it-compare"><i class="fa fa-check"></i><b>16.1</b> What is hive, and how does it compare</a></li>
+</ul></li>
+<li class="chapter" data-level="17" data-path="what-oracle-r-enterprise-is.html"><a href="what-oracle-r-enterprise-is.html"><i class="fa fa-check"></i><b>17</b> What Oracle R Enterprise is</a><ul>
+<li class="chapter" data-level="17.1" data-path="what-oracle-r-enterprise-is.html"><a href="what-oracle-r-enterprise-is.html#loading-ore"><i class="fa fa-check"></i><b>17.1</b> Loading ORE</a></li>
+<li class="chapter" data-level="17.2" data-path="what-oracle-r-enterprise-is.html"><a href="what-oracle-r-enterprise-is.html#pushing-r-computation-to-the-database"><i class="fa fa-check"></i><b>17.2</b> Pushing R computation to the database</a></li>
+<li class="chapter" data-level="17.3" data-path="what-oracle-r-enterprise-is.html"><a href="what-oracle-r-enterprise-is.html#ore-build-in-algorithms"><i class="fa fa-check"></i><b>17.3</b> ORE build-in algorithms</a></li>
+<li class="chapter" data-level="17.4" data-path="what-oracle-r-enterprise-is.html"><a href="what-oracle-r-enterprise-is.html#calling-r-from-sql"><i class="fa fa-check"></i><b>17.4</b> Calling R from SQL</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Data analysis with R and Oracle</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="row-pattern-matching" class="section level1">
+<h1><span class="header-section-number">Chapter 11</span> Row pattern matching</h1>
+<p>So far, we have mostly been doing things that are equally possible to do in R, and hence the reason for doing it in SQL instead of R is probably performance-related.</p>
+<p>Row pattern matching is something quite different, to which there currently isn't any comparable functionality in any R libraries. That is bound to change sooner or later, but for the time being, Oracle has a big selling point in being able to do a type of processing that is both novel, useful and difficult to implement from scratch.</p>
+<p>Row pattern matching is, basically, a <code>WHERE</code>-statement on steroids. Instead of selecting individual rows, you can select whole sets of rows, if they, as a group satisfy the criteria you have written. The canonical example is stocks, where you may not be interested in selecting the days where the stock is above, say, 20, but you really want to find periods where the price was increasing. With row pattern matching you can do that - define what an increase means, and then say you want all rows that are part of, f.ex., periods of five or more consecutive days of price increases.</p>
+<p>In addition to the amped-up WHERE-clause, pattern matching lets you calculate new columns, called <code>MEASURES</code>, from the patterns that you define. Things like the difference between the start- and end-price in the aforementioned 5-or-more days of stock price increases.</p>
+<p>Also, the pattern matching can do aggregations, leaving you with only one row summing up each pattern found.</p>
+<div id="a-simpleish-example" class="section level2">
+<h2><span class="header-section-number">11.1</span> A simple(ish) example</h2>
+<p>Although the stocks make a good and relatable intro to what pattern-matching can do, it is probably more powerful in other areas, with more feature-rich data. Nevertheless, we will start by doing a simple stock-price example where we select periods of stock price increases, however long or short.</p>
+<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql">
+<span class="kw">SELECT</span> * <span class="kw">FROM</span> ticker
+MATCH_RECOGNIZE(
+<span class="kw">PARTITION</span> <span class="kw">BY</span> symbol
+<span class="kw">ORDER</span> <span class="kw">BY</span> tstamp
+<span class="kw">ALL</span> <span class="kw">ROWS</span> PER MATCH
+PATTERN ( up+ )
+DEFINE up <span class="kw">AS</span> PREV(price)&lt;price
+)</code></pre></div>
+<div class="knitsql-table">
+<table>
+<caption><span id="tab:unnamed-chunk-33">Table 11.1: </span>Displaying records 1 - 10</caption>
+<thead>
+<tr class="header">
+<th align="left">SYMBOL</th>
+<th align="left">TSTAMP</th>
+<th align="right">PRICE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">ACME</td>
+<td align="left">2011-04-02</td>
+<td align="right">17</td>
+</tr>
+<tr class="even">
+<td align="left">ACME</td>
+<td align="left">2011-04-03</td>
+<td align="right">19</td>
+</tr>
+<tr class="odd">
+<td align="left">ACME</td>
+<td align="left">2011-04-04</td>
+<td align="right">21</td>
+</tr>
+<tr class="even">
+<td align="left">ACME</td>
+<td align="left">2011-04-05</td>
+<td align="right">25</td>
+</tr>
+<tr class="odd">
+<td align="left">ACME</td>
+<td align="left">2011-04-07</td>
+<td align="right">15</td>
+</tr>
+<tr class="even">
+<td align="left">ACME</td>
+<td align="left">2011-04-08</td>
+<td align="right">20</td>
+</tr>
+<tr class="odd">
+<td align="left">ACME</td>
+<td align="left">2011-04-09</td>
+<td align="right">24</td>
+</tr>
+<tr class="even">
+<td align="left">ACME</td>
+<td align="left">2011-04-10</td>
+<td align="right">25</td>
+</tr>
+<tr class="odd">
+<td align="left">ACME</td>
+<td align="left">2011-04-13</td>
+<td align="right">25</td>
+</tr>
+<tr class="even">
+<td align="left">ACME</td>
+<td align="left">2011-04-17</td>
+<td align="right">14</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Although the query was short, there is a lot of new syntax here, starting with the <code>MATCH_RECOGNIZE</code> command that encompases the whole circus. Inside the match_recognize command, we start off by partitioning by symbol, which just like with the <code>OVER</code> clause says that we want to analyze patterns in different stocks in isolation. Secondly, we order by <code>TSTAMP</code>, which is the time column and denotes in which order things happened (the default ordering, ascending) usually agrees with how we want to analyze pattern in time.</p>
+<p>Now, for the really new stuff, which is probably easier to understand if we start with the last line.</p>
+<p><code>DEFINE</code> is where we define the basic building blocks of what we want to match. We say that a row can be classified as &quot;UP&quot; if the stock price is higher that day than it was on the previous day. This is where the ORDER BY statement becomes important - without it, the previous row might not be the previous day, and our results wouldn't make much sense.</p>
+<p>In the <code>PATTERN</code> statement, we use the definition(s) we create in the DEFINE statement to specify what combinations of rows we are looking for. This step uses a lightweight version of regex to let us specify the patters, and the <code>+</code>-sign means the same here as in regex: One or more occurance.</p>
+<p>Finally, <code>ALL ROWS PER MATCH</code> is an explicit way of telling Oracle not to aggregate the results. In this query, we use match_recognize simply as a filter.</p>
+<p>To summarize, we use the <code>DEFINE</code> statement to definitions/labels/classifications of rows, with the help of functions such as <code>PREV</code> (previous row), <code>NEXT</code>, and some other methods that we will return to. We use these labels in the <code>PATTERN</code> statement, where we specify which combinations of these rows we are looking for, and finally we specify that we don't want to aggregate the results.</p>
+<p>The output of this, however, isn't easy to make sense of. The first four rows shows that the price increases from 17 to 25, but if we read the code carefully we see that 17 must already be an increase from the day before - otherwise it wouldn't have satisfied the <code>UP</code> definition. But we don't see what it increased from.</p>
+<p>Then, it drops from 25 to 15, and skips a day. Presumably, it found the pattern multiple times in the same stock, right next to each other. But we have a hard time reading this from the output, so let's add some more to the query.</p>
+<p>Firstly, we want to add the day the pattern starts. To do this we must add a definition to the pattern, but since we don't need this first row to satisfy any conditions other than coming before the first <code>UP</code>, we don't actually have to define it. If that sounds strange, you'll understand when you see it.</p>
+<p>Secondly, we want to see when one pattern ends and another starts. We can do this by adding a computed variable, called a <code>MEASURE</code> and a function called <code>MATCH_NUMBER()</code> that specifically enumerates what occurance of the pattern the row is part of.</p>
+<p>Additionally, since we now will have two different definitions as part of our pattern, we want to see what each row is classified as. This too we can do in the <code>MEASURE</code> clause, with the special function <code>CLASSIFIER()</code> which returns the name of the definition that triggered.</p>
+<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql"><span class="kw">SELECT</span> * <span class="kw">FROM</span> ticker
+MATCH_RECOGNIZE(
+<span class="kw">PARTITION</span> <span class="kw">BY</span> symbol
+<span class="kw">ORDER</span> <span class="kw">BY</span> tstamp
+MEASURES MATCH_NUMBER() <span class="kw">AS</span> match_num,
+        CLASSIFIER() <span class="kw">as</span> clf
+<span class="kw">ALL</span> <span class="kw">ROWS</span> PER MATCH
+PATTERN ( strt up+ )
+DEFINE up <span class="kw">AS</span> PREV(price)&lt;price
+)</code></pre></div>
+<div class="knitsql-table">
+<table>
+<caption><span id="tab:unnamed-chunk-34">Table 11.2: </span>Displaying records 1 - 10</caption>
+<thead>
+<tr class="header">
+<th align="left">SYMBOL</th>
+<th align="left">TSTAMP</th>
+<th align="right">MATCH_NUM</th>
+<th align="left">CLF</th>
+<th align="right">PRICE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">ACME</td>
+<td align="left">2011-04-01</td>
+<td align="right">1</td>
+<td align="left">STRT</td>
+<td align="right">12</td>
+</tr>
+<tr class="even">
+<td align="left">ACME</td>
+<td align="left">2011-04-02</td>
+<td align="right">1</td>
+<td align="left">UP</td>
+<td align="right">17</td>
+</tr>
+<tr class="odd">
+<td align="left">ACME</td>
+<td align="left">2011-04-03</td>
+<td align="right">1</td>
+<td align="left">UP</td>
+<td align="right">19</td>
+</tr>
+<tr class="even">
+<td align="left">ACME</td>
+<td align="left">2011-04-04</td>
+<td align="right">1</td>
+<td align="left">UP</td>
+<td align="right">21</td>
+</tr>
+<tr class="odd">
+<td align="left">ACME</td>
+<td align="left">2011-04-05</td>
+<td align="right">1</td>
+<td align="left">UP</td>
+<td align="right">25</td>
+</tr>
+<tr class="even">
+<td align="left">ACME</td>
+<td align="left">2011-04-06</td>
+<td align="right">2</td>
+<td align="left">STRT</td>
+<td align="right">12</td>
+</tr>
+<tr class="odd">
+<td align="left">ACME</td>
+<td align="left">2011-04-07</td>
+<td align="right">2</td>
+<td align="left">UP</td>
+<td align="right">15</td>
+</tr>
+<tr class="even">
+<td align="left">ACME</td>
+<td align="left">2011-04-08</td>
+<td align="right">2</td>
+<td align="left">UP</td>
+<td align="right">20</td>
+</tr>
+<tr class="odd">
+<td align="left">ACME</td>
+<td align="left">2011-04-09</td>
+<td align="right">2</td>
+<td align="left">UP</td>
+<td align="right">24</td>
+</tr>
+<tr class="even">
+<td align="left">ACME</td>
+<td align="left">2011-04-10</td>
+<td align="right">2</td>
+<td align="left">UP</td>
+<td align="right">25</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>This helps immensly with readability. We can see that the start (nicknamed <code>strt</code> in the code) of the pattern is the 31st of march 2011, when the price is 12, before it increases to 17 which was the first observation we saw in the previous query. Also, we get a confirmation that the drop we saw when the price was 25, was the end of the first occurance of the pattern and the start of the second occurance. When we see a new ticker symbol, the match number counter resets.</p>
+</div>
+<div id="a-more-involved-example" class="section level2">
+<h2><span class="header-section-number">11.2</span> A more involved example</h2>
+<p>In order to really show the power of pattern matching, we have to import some more data. The New York City public payroll data is both public, rich, and has a panel-data structure that allows us to study changes over time. As of this writing, you can find the data at <a href="https://data.cityofnewyork.us/City-Government/Citywide-Payroll-Data-Fiscal-Year-/k397-673e" class="uri">https://data.cityofnewyork.us/City-Government/Citywide-Payroll-Data-Fiscal-Year-/k397-673e</a>.</p>
+<div id="importing-and-cleaning" class="section level3">
+<h3><span class="header-section-number">11.2.1</span> Importing and cleaning</h3>
+<p>You can download the dataset as CSV, and use the SQL Developer import wizard to create a table for it. If this was a dataset we were expecting to add more data to regularly, we would have set up a proper import script, probably in R, which would make the process automatic and reproducible. But in this case, just right-click on the tables-folder in the left sidebar, and choose import data. The wizard will guide you through the rest.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dplyr)
+
+
+df &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&#39;~/citywide-payroll-data-fiscal-year.csv&#39;</span>, <span class="dt">sep=</span><span class="st">&quot;,&quot;</span>, 
+               <span class="dt">col.names =</span> <span class="kw">c</span>(<span class="st">&#39;YEAR&#39;</span>, <span class="st">&#39;PAYROLL_NO&#39;</span>, <span class="st">&#39;AGENCY_NAME&#39;</span>, <span class="st">&#39;LAST_NAME&#39;</span>, <span class="st">&#39;FIRST_NAME&#39;</span>, <span class="st">&#39;MID_INIT&#39;</span>, 
+                             <span class="st">&#39;AGENCY_START_DATE&#39;</span>, <span class="st">&#39;WORK_LOCATION_BOROUGH&#39;</span>, <span class="st">&#39;TITLE_DESCRIPTION&#39;</span>, 
+                             <span class="st">&#39;LEAVE_STATUS_AS_OF_JUNE_30&#39;</span>, <span class="st">&#39;BASE_SALARY&#39;</span>, <span class="st">&#39;PAY_BASIS&#39;</span>, <span class="st">&#39;REGULAR_HOURS&#39;</span>, 
+                             <span class="st">&#39;REGULAR_GROSS_PAID&#39;</span>, <span class="st">&#39;OT_HOURS&#39;</span>, <span class="st">&#39;TOTAL_OT_PAID&#39;</span>, <span class="st">&#39;TOTAL_OTHER_PAY&#39;</span>), <span class="dt">header =</span> <span class="dv">1</span>, <span class="dt">stringsAsFactors =</span> F)
+
+
+<span class="kw">dbWriteTable</span>(con, <span class="st">&quot;NYCPAY&quot;</span>, df)</code></pre></div>
+<p>After the data is imported, we want to do a little bit of data analysis to find out what we are dealing with. We can already see there are a few different ways to measure pay (the <code>PAY BASIS</code> column), which we might have to deal with in order to compare pay. But more importantly, since we want to analyze the carreer development of employees, we need to make sure that we have some sort of way of uniquely identifying each employee.</p>
+<p>But first, as a matter of good practice, let's add an anonymous ID for each person so that we don't have to use full names everywhere.</p>
+<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql"><span class="kw">ALTER</span> <span class="kw">TABLE</span> nycpay
+<span class="kw">ADD</span> PERS_ID <span class="dt">VARCHAR</span>(<span class="dv">32</span>) ;
+
+
+<span class="kw">UPDATE</span> nycpay
+<span class="kw">SET</span> PERS_ID = <span class="fu">ORA_HASH</span>(FIRST_NAME || MID_INIT || LAST_NAME);
+
+<span class="kw">COMMIT</span>;</code></pre></div>
+<p>It is easier to have <em>one</em> column for identifying a person, and if you have worked with personal data before, you will hopefully appreciate working with data that isn't directly personally identifiable (PII). Since the dataset is public this is in principle an empty gesture, but removing PII is nevertheless valuable as a general practice.</p>
+<p>Back to uniquely identifying one person. Names are of course not unique, but we also have another challenge: One person may have more than one job with the city. This is a real challenge, because the data won't be unique by person and year - and this is what we want to track. How does each person fare.</p>
+<p>In practice we have two choices: Aggregate the data so that it is unique per person per year, or simply remove persons who have had multiple jobs. First, let's check how many people actually have multiple jobs:</p>
+<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql"><span class="kw">SELECT</span> <span class="fu">COUNT</span>(<span class="dv">1</span>), <span class="fu">COUNT</span>(<span class="kw">DISTINCT</span> pers_id), <span class="fu">SUM</span>(occ) <span class="kw">FROM</span> (
+<span class="kw">SELECT</span> <span class="dt">year</span>, pers_id, <span class="fu">COUNT</span>(<span class="dv">1</span>) <span class="kw">AS</span> occ <span class="kw">FROM</span> nycpay
+<span class="kw">GROUP</span> <span class="kw">BY</span> <span class="dt">year</span>, pers_id
+<span class="kw">HAVING</span> <span class="fu">count</span>(<span class="dv">1</span>)&gt;<span class="dv">1</span>
+)</code></pre></div>
+<div class="knitsql-table">
+<table>
+<caption><span id="tab:unnamed-chunk-35">Table 11.3: </span>1 records</caption>
+<thead>
+<tr class="header">
+<th align="right">COUNT(1)</th>
+<th align="right">COUNT(DISTINCTPERS_ID)</th>
+<th align="right">SUM(OCC)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">834680</td>
+<td align="right">259922</td>
+<td align="right">1831579</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>We can see that out of 3.9 million rows, over 1.8 million belongs to people who have had more than one job in one year. And that there are 259 922 people who have had more than one job. If our goal was to conduct a thorough review of the city's pay data, we would have to choose to aggregate the data in some way in order to construct a dataset that contained every person and a meaningful unique identifier.</p>
+<p>Further exploration shows that a large number of people are election workers, which we might not find all that interesting to analyze in a career perspective. We use the chance to create a second table without the names, without the people causing the duplicates, and with some other data tidying thrown in.</p>
+<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql"><span class="kw">CREATE</span> <span class="kw">TABLE</span> SIMPLEPAY <span class="kw">AS</span> (
+  <span class="kw">SELECT</span> <span class="dt">year</span>, 
+  pers_id,
+  <span class="fu">TRIM</span>(<span class="fu">upper</span>(AGENCY_NAME)) <span class="kw">AS</span> agency, 
+  <span class="fu">TO_DATE</span>(<span class="fu">SUBSTR</span>(AGENCY_START_DATE, <span class="dv">1</span>, <span class="dv">10</span>), <span class="st">&#39;YYYY-MM-DD&#39;</span>) <span class="kw">AS</span> job_start,
+  <span class="fu">TRIM</span>(WORK_LOCATION_BOROUGH) <span class="kw">AS</span> job_location,
+  <span class="fu">TRIM</span>(TITLE_DESCRIPTION) <span class="kw">AS</span> job_title,
+  <span class="fu">TRIM</span>(LEAVE_STATUS_AS_OF_JUNE_30) <span class="kw">AS</span> leave_status,
+  base_salary,
+  <span class="fu">TRIM</span>(pay_basis) <span class="kw">AS</span> pay_basis,
+  regular_hours,
+  regular_gross_paid,
+  ot_hours,
+  total_ot_paid,
+  TOTAL_OTHER_PAY
+  <span class="kw">FROM</span> nycpay
+  <span class="kw">WHERE</span> 
+  <span class="fu">TRIM</span>(<span class="fu">upper</span>(TITLE_DESCRIPTION)) != <span class="st">&#39;ELECTION WORKER&#39;</span> <span class="kw">AND</span>
+  pers_id <span class="kw">NOT</span> <span class="kw">IN</span>(
+    <span class="kw">SELECT</span> <span class="kw">DISTINCT</span> pers_id <span class="kw">FROM</span> nycpay
+    <span class="kw">WHERE</span> <span class="fu">TRIM</span>(<span class="fu">upper</span>(TITLE_DESCRIPTION)) = <span class="st">&#39;ELECTION WORKER&#39;</span>
+    <span class="kw">GROUP</span> <span class="kw">BY</span> <span class="dt">year</span>, pers_id
+    <span class="kw">HAVING</span> <span class="fu">COUNT</span>(<span class="dv">1</span>)&gt;<span class="dv">1</span>
+  )
+);</code></pre></div>
+<p>This leaves us with only about 250 000 records (people) per year, but this is hopefully people with fairly regular employment contracts for whom we can do meaningful analysis.</p>
+<p>Before we go any further, let's check a column that looks promising: Regular gross pay. This seems to always have a value, which might make it a good indicator of what a person actually makes (some of the other pay-related columns have 0-values, which is not a likely wage level.</p>
+<p>We can use the <code>WIDTH_BUCKET</code> function to create bins, and count the number of people in the respective wage brackets. We create 20 bins between $0 and $200,000, which leaves us with neat $10,000 increments. Any values outside the $0-$200,000 interval will be grouped in &quot;overflow&quot; buckets at the low and high end.</p>
+<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql"><span class="kw">SELECT</span> <span class="fu">WIDTH_BUCKET</span>(BASE_SALARY, <span class="dv">0</span>, <span class="dv">200000</span>, <span class="dv">20</span>) <span class="kw">AS</span> pay,
+<span class="fu">MIN</span>(BASE_SALARY) <span class="kw">AS</span> from_pay,
+<span class="fu">MAX</span>(BASE_SALARY) <span class="kw">AS</span> to_pay,
+<span class="fu">COUNT</span>(<span class="dv">1</span>) <span class="kw">AS</span> employee_count
+<span class="kw">FROM</span> simplepay
+<span class="kw">GROUP</span> <span class="kw">BY</span> <span class="fu">WIDTH_BUCKET</span>(BASE_SALARY, <span class="dv">0</span>, <span class="dv">200000</span>, <span class="dv">20</span>)
+<span class="kw">ORDER</span> <span class="kw">BY</span> <span class="dv">1</span></code></pre></div>
+<div class="knitsql-table">
+<table>
+<caption><span id="tab:unnamed-chunk-36">Table 11.4: </span>Displaying records 1 - 10</caption>
+<thead>
+<tr class="header">
+<th align="left">PAY</th>
+<th align="right">FROM_PAY</th>
+<th align="right">TO_PAY</th>
+<th align="right">EMPLOYEE_COUNT</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">1</td>
+<td align="right">1e-02</td>
+<td align="right">9910</td>
+<td align="right">1299806</td>
+</tr>
+<tr class="even">
+<td align="left">2</td>
+<td align="right">1e+04</td>
+<td align="right">19928</td>
+<td align="right">2048</td>
+</tr>
+<tr class="odd">
+<td align="left">3</td>
+<td align="right">2e+04</td>
+<td align="right">29999</td>
+<td align="right">65973</td>
+</tr>
+<tr class="even">
+<td align="left">4</td>
+<td align="right">3e+04</td>
+<td align="right">39999</td>
+<td align="right">267240</td>
+</tr>
+<tr class="odd">
+<td align="left">5</td>
+<td align="right">4e+04</td>
+<td align="right">49999</td>
+<td align="right">318872</td>
+</tr>
+<tr class="even">
+<td align="left">6</td>
+<td align="right">5e+04</td>
+<td align="right">59998</td>
+<td align="right">257477</td>
+</tr>
+<tr class="odd">
+<td align="left">7</td>
+<td align="right">6e+04</td>
+<td align="right">69999</td>
+<td align="right">238067</td>
+</tr>
+<tr class="even">
+<td align="left">8</td>
+<td align="right">7e+04</td>
+<td align="right">79999</td>
+<td align="right">303499</td>
+</tr>
+<tr class="odd">
+<td align="left">9</td>
+<td align="right">8e+04</td>
+<td align="right">89999</td>
+<td align="right">317832</td>
+</tr>
+<tr class="even">
+<td align="left">10</td>
+<td align="right">9e+04</td>
+<td align="right">99999</td>
+<td align="right">183706</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>There are no negative values, but a lot of employees with less than $10,000 in base pay. A quick look at the job titles for these low-paying jobs may reveal something about what type of jobs this is.</p>
+<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql"><span class="kw">SELECT</span> job_title, <span class="fu">COUNT</span>(<span class="dv">1</span>) <span class="kw">AS</span> num_employees <span class="kw">FROM</span> simplepay
+<span class="kw">WHERE</span> base_salary&lt;<span class="dv">10000</span>
+<span class="kw">GROUP</span> <span class="kw">BY</span> job_title
+<span class="kw">ORDER</span> <span class="kw">BY</span> <span class="dv">2</span> <span class="kw">DESC</span>
+FETCH <span class="fu">FIRST</span> <span class="dv">20</span> <span class="kw">ROWS</span> <span class="kw">ONLY</span></code></pre></div>
+<div class="knitsql-table">
+<table>
+<caption><span id="tab:unnamed-chunk-37">Table 11.5: </span>Displaying records 1 - 10</caption>
+<thead>
+<tr class="header">
+<th align="left">JOB_TITLE</th>
+<th align="right">NUM_EMPLOYEES</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">TEACHER- PER SESSION</td>
+<td align="right">589323</td>
+</tr>
+<tr class="even">
+<td align="left">TEACHER-GENERAL ED</td>
+<td align="right">82246</td>
+</tr>
+<tr class="odd">
+<td align="left">F/T SCHOOL AIDE</td>
+<td align="right">57402</td>
+</tr>
+<tr class="even">
+<td align="left">JOB TRAINING PARTICIPANT</td>
+<td align="right">52810</td>
+</tr>
+<tr class="odd">
+<td align="left">SUBSTITUTE ED PARA</td>
+<td align="right">50308</td>
+</tr>
+<tr class="even">
+<td align="left">COLLEGE ASSISTANT</td>
+<td align="right">37153</td>
+</tr>
+<tr class="odd">
+<td align="left">ADJUNCT LECTURER</td>
+<td align="right">28939</td>
+</tr>
+<tr class="even">
+<td align="left">F/T SCHOOL LUNCH HELPER</td>
+<td align="right">28515</td>
+</tr>
+<tr class="odd">
+<td align="left">STUDENT AIDE</td>
+<td align="right">22667</td>
+</tr>
+<tr class="even">
+<td align="left">CITY SEASONAL AIDE</td>
+<td align="right">22412</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The largest group is job traning participants, but a large and diverse group of school aides dominates the list. Many of these roles can be argued have an element of volunteering or civil engagement to them - pay might not be the main reason these people are doing the job.</p>
+<p>The job training participants are a good testcase: Let's look at how they fared. Did any of them end up with a job in the city?</p>
+<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql"><span class="kw">SELECT</span> * <span class="kw">FROM</span> (
+  <span class="kw">SELECT</span> <span class="dt">year</span>, pers_id, agency, job_title, job_start, base_salary, pay_basis, leave_status <span class="kw">FROM</span> simplepay
+)
+MATCH_RECOGNIZE(
+<span class="kw">PARTITION</span> <span class="kw">BY</span> pers_id
+<span class="kw">ORDER</span> <span class="kw">BY</span> <span class="dt">year</span>
+MEASURES <span class="fu">MONTHS_BETWEEN</span>(<span class="fu">FIRST</span>(fulljob.job_start), training.job_start) <span class="kw">AS</span> time_to_job,
+<span class="fu">COUNT</span>(fulljob.*) <span class="kw">AS</span> fulljob_years
+<span class="kw">ALL</span> <span class="kw">ROWS</span> PER MATCH
+PATTERN ( ^ training fulljob+ )
+DEFINE 
+training <span class="kw">AS</span> job_title=<span class="st">&#39;JOB TRAINING PARTICIPANT&#39;</span>,
+fulljob <span class="kw">AS</span> job_title!=<span class="st">&#39;JOB TRAINING PARTICIPANT&#39;</span>
+)</code></pre></div>
+<div class="knitsql-table">
+<table style="width:100%;">
+<caption><span id="tab:unnamed-chunk-38">Table 11.6: </span>Displaying records 1 - 10</caption>
+<colgroup>
+<col width="7%" />
+<col width="3%" />
+<col width="8%" />
+<col width="9%" />
+<col width="20%" />
+<col width="16%" />
+<col width="7%" />
+<col width="8%" />
+<col width="7%" />
+<col width="9%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">PERS_ID</th>
+<th align="right">YEAR</th>
+<th align="right">TIME_TO_JOB</th>
+<th align="right">FULLJOB_YEARS</th>
+<th align="left">AGENCY</th>
+<th align="left">JOB_TITLE</th>
+<th align="left">JOB_START</th>
+<th align="right">BASE_SALARY</th>
+<th align="left">PAY_BASIS</th>
+<th align="left">LEAVE_STATUS</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">1000843506</td>
+<td align="right">2016</td>
+<td align="right">NA</td>
+<td align="right">0</td>
+<td align="left">DEPT OF PARKS &amp; RECREATION</td>
+<td align="left">JOB TRAINING PARTICIPANT</td>
+<td align="left">2016-05-04</td>
+<td align="right">11.8</td>
+<td align="left">per Hour</td>
+<td align="left">ACTIVE</td>
+</tr>
+<tr class="even">
+<td align="left">1000843506</td>
+<td align="right">2017</td>
+<td align="right">14</td>
+<td align="right">1</td>
+<td align="left">DEPT OF PARKS &amp; RECREATION</td>
+<td align="left">CITY SEASONAL AIDE</td>
+<td align="left">2017-06-30</td>
+<td align="right">15.2</td>
+<td align="left">per Hour</td>
+<td align="left">ACTIVE</td>
+</tr>
+<tr class="odd">
+<td align="left">1002309329</td>
+<td align="right">2015</td>
+<td align="right">NA</td>
+<td align="right">0</td>
+<td align="left">DEPT OF PARKS &amp; RECREATION</td>
+<td align="left">JOB TRAINING PARTICIPANT</td>
+<td align="left">2013-04-24</td>
+<td align="right">9.4</td>
+<td align="left">per Hour</td>
+<td align="left">CEASED</td>
+</tr>
+<tr class="even">
+<td align="left">1002309329</td>
+<td align="right">2015</td>
+<td align="right">19</td>
+<td align="right">1</td>
+<td align="left">HRA/DEPT OF SOCIAL SERVICES</td>
+<td align="left">ELIGIBILITY SPECIALIST</td>
+<td align="left">2014-12-08</td>
+<td align="right">33284.0</td>
+<td align="left">per Annum</td>
+<td align="left">CEASED</td>
+</tr>
+<tr class="odd">
+<td align="left">1006085312</td>
+<td align="right">2016</td>
+<td align="right">NA</td>
+<td align="right">0</td>
+<td align="left">DEPT OF PARKS &amp; RECREATION</td>
+<td align="left">JOB TRAINING PARTICIPANT</td>
+<td align="left">2015-06-29</td>
+<td align="right">11.8</td>
+<td align="left">per Hour</td>
+<td align="left">CEASED</td>
+</tr>
+<tr class="even">
+<td align="left">1006085312</td>
+<td align="right">2020</td>
+<td align="right">49</td>
+<td align="right">1</td>
+<td align="left">DEPT OF HEALTH/MENTAL HYGIENE</td>
+<td align="left">COMMUNITY COORDINATOR</td>
+<td align="left">2019-07-20</td>
+<td align="right">36.6</td>
+<td align="left">per Hour</td>
+<td align="left">ACTIVE</td>
+</tr>
+<tr class="odd">
+<td align="left">1010330046</td>
+<td align="right">2018</td>
+<td align="right">NA</td>
+<td align="right">0</td>
+<td align="left">DEPT OF PARKS &amp; RECREATION</td>
+<td align="left">JOB TRAINING PARTICIPANT</td>
+<td align="left">2017-12-13</td>
+<td align="right">13.5</td>
+<td align="left">per Hour</td>
+<td align="left">ACTIVE</td>
+</tr>
+<tr class="even">
+<td align="left">1010330046</td>
+<td align="right">2019</td>
+<td align="right">17</td>
+<td align="right">1</td>
+<td align="left">DEPT OF PARKS &amp; RECREATION</td>
+<td align="left">CITY PARK WORKER</td>
+<td align="left">2019-05-20</td>
+<td align="right">16.1</td>
+<td align="left">per Hour</td>
+<td align="left">ACTIVE</td>
+</tr>
+<tr class="odd">
+<td align="left">1010330046</td>
+<td align="right">2020</td>
+<td align="right">17</td>
+<td align="right">2</td>
+<td align="left">DEPT OF PARKS &amp; RECREATION</td>
+<td align="left">CITY PARK WORKER</td>
+<td align="left">2019-05-20</td>
+<td align="right">16.1</td>
+<td align="left">per Hour</td>
+<td align="left">CEASED</td>
+</tr>
+<tr class="even">
+<td align="left">1011149826</td>
+<td align="right">2015</td>
+<td align="right">NA</td>
+<td align="right">0</td>
+<td align="left">DEPT OF PARKS &amp; RECREATION</td>
+<td align="left">JOB TRAINING PARTICIPANT</td>
+<td align="left">2011-07-05</td>
+<td align="right">9.3</td>
+<td align="left">per Hour</td>
+<td align="left">CEASED</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Here, we have selected people who start out as job training participants, and who (the next time we see them) are regular employees (well, not job training participants anyway). We also measure the number of months from they start job training to they start a paid job, and count the number of rows of regular employment.</p>
+<p>From here, we can continue our analysis by counting the number of people this is, compare it to the number of people who have been in job training programmes, and look at the time between the job training programme and their job start. A practical way to do this is by removing the <code>ALL ROWS PER MATCH</code> clause, which will leave us with one row per person.</p>
+<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql"><span class="kw">SELECT</span> * <span class="kw">FROM</span> (
+  <span class="kw">SELECT</span> <span class="dt">year</span>, pers_id, agency, job_title, job_start, base_salary, pay_basis, leave_status <span class="kw">FROM</span> simplepay
+)
+MATCH_RECOGNIZE(
+<span class="kw">PARTITION</span> <span class="kw">BY</span> pers_id
+<span class="kw">ORDER</span> <span class="kw">BY</span> <span class="dt">year</span>
+MEASURES <span class="fu">MONTHS_BETWEEN</span>(<span class="fu">FIRST</span>(fulljob.job_start), <span class="fu">FIRST</span>(training.job_start)) <span class="kw">AS</span> time_to_job,
+<span class="fu">COUNT</span>(fulljob.*) <span class="kw">AS</span> fulljob_years
+PATTERN ( ^ training+ fulljob+ )
+DEFINE 
+training <span class="kw">AS</span> job_title=<span class="st">&#39;JOB TRAINING PARTICIPANT&#39;</span>,
+fulljob <span class="kw">AS</span> job_title!=<span class="st">&#39;JOB TRAINING PARTICIPANT&#39;</span>
+)</code></pre></div>
+<div class="knitsql-table">
+<table>
+<caption><span id="tab:unnamed-chunk-39">Table 11.7: </span>Displaying records 1 - 10</caption>
+<thead>
+<tr class="header">
+<th align="left">PERS_ID</th>
+<th align="right">TIME_TO_JOB</th>
+<th align="right">FULLJOB_YEARS</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">1000843506</td>
+<td align="right">14</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">1002309329</td>
+<td align="right">19</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">1002319496</td>
+<td align="right">21</td>
+<td align="right">4</td>
+</tr>
+<tr class="even">
+<td align="left">1004555801</td>
+<td align="right">0</td>
+<td align="right">3</td>
+</tr>
+<tr class="odd">
+<td align="left">1006085312</td>
+<td align="right">49</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">1006328677</td>
+<td align="right">16</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">1010330046</td>
+<td align="right">17</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td align="left">1011280536</td>
+<td align="right">37</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">101235340</td>
+<td align="right">77</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">1020333191</td>
+<td align="right">0</td>
+<td align="right">2</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Just by deleting a line, we have an aggregate, with the partition variable (<code>PERS_ID</code>), and the <code>MEASURES</code> we defined. This is a great start to take into R for further analysis. We have also changed the query slightly, opening up for multiple years of job training (the <code>training+</code> argument), and changed our measure to make sure we get moths between the start date of the first year in job training and the start date of the first job.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">q &lt;-<span class="st"> </span><span class="kw">dbSendQuery</span>(con, <span class="st">&quot;</span>
+<span class="st">SELECT * FROM (</span>
+<span class="st">  SELECT year, pers_id, agency, job_title, job_start, base_salary, pay_basis, leave_status FROM simplepay</span>
+<span class="st">)</span>
+<span class="st">MATCH_RECOGNIZE(</span>
+<span class="st">PARTITION BY pers_id</span>
+<span class="st">ORDER BY year</span>
+<span class="st">MEASURES MONTHS_BETWEEN(FIRST(fulljob.job_start), FIRST(training.job_start)) AS time_to_job,</span>
+<span class="st">COUNT(fulljob.*) AS fulljob_years</span>
+<span class="st">PATTERN ( ^ training+ fulljob+ )</span>
+<span class="st">DEFINE </span>
+<span class="st">training AS job_title=&#39;JOB TRAINING PARTICIPANT&#39;,</span>
+<span class="st">fulljob AS job_title!=&#39;JOB TRAINING PARTICIPANT&#39;</span>
+<span class="st">)</span>
+<span class="st">&quot;</span>)
+df &lt;-<span class="st"> </span><span class="kw">fetch</span>(q)
+
+<span class="kw">library</span>(ggplot2)
+<span class="kw">library</span>(dplyr)
+df <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(TIME_TO_JOB)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_histogram</span>() </code></pre></div>
+<pre><code>## stat_bin: binwidth defaulted to range/30. Use &#39;binwidth = x&#39; to adjust this.</code></pre>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-40-1.png" width="672" /></p>
+<p>A large portion of the people that get a job in the city after job training, seems to be keeping the job they had in job training, but transition to a normal position. For the group of people who didn't get a job straight from their job training, the curve looks roughly linear. The 5 years of data we have corresponds to 60 months, so the non-neglible number of people getting a job close to 100 months is probably due job tranings that started long before 2014 when our data set starts. The long tail of both negative and positive values are most likely a result of data entry mistakes. This is real world data, and there will be real-world errors.</p>
+
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="statistical-functions.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="inserting-and-updating-data.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/rstudio/bookdown-demo/edit/master/10-pattern-matching.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["bookdown-demo.pdf", "bookdown-demo.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

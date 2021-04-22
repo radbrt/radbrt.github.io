@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 16 Big Data Databases | Data analysis with R and Oracle</title>
+  <meta name="description" content="Oracle is one of the most common database systems used in the business world. For analysts, an Oracle database is often their data souce. Being able to effectively query databases, and leave to the database what the database is best at and R what R is best at, can speed up analysis and reduce computational overhead." />
+  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 16 Big Data Databases | Data analysis with R and Oracle" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="Oracle is one of the most common database systems used in the business world. For analysts, an Oracle database is often their data souce. Being able to effectively query databases, and leave to the database what the database is best at and R what R is best at, can speed up analysis and reduce computational overhead." />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 16 Big Data Databases | Data analysis with R and Oracle" />
+  
+  <meta name="twitter:description" content="Oracle is one of the most common database systems used in the business world. For analysts, an Oracle database is often their data souce. Being able to effectively query databases, and leave to the database what the database is best at and R what R is best at, can speed up analysis and reduce computational overhead." />
+  
+
+<meta name="author" content="Henning Holgersen" />
+
+
+<meta name="date" content="2021-04-22" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="relevance-to-other-databases.html"/>
+<link rel="next" href="what-oracle-r-enterprise-is.html"/>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">A Minimal Book Example</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Who is this book for?</a><ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#what-will-the-book-cover"><i class="fa fa-check"></i><b>1.1</b> What will the book cover?</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#what-does-the-book-not-cover"><i class="fa fa-check"></i><b>1.2</b> What does the book not cover?</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>2</b> Introduction</a><ul>
+<li class="chapter" data-level="2.1" data-path="intro.html"><a href="intro.html#what-analysts-need"><i class="fa fa-check"></i><b>2.1</b> What analysts need</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="system-setup.html"><a href="system-setup.html"><i class="fa fa-check"></i><b>3</b> System setup</a><ul>
+<li class="chapter" data-level="3.1" data-path="system-setup.html"><a href="system-setup.html#follow-along-with-the-bigdata-lite-vm-or-xe18-on-docker"><i class="fa fa-check"></i><b>3.1</b> Follow along with the BigData Lite VM or XE18 on Docker</a></li>
+<li class="chapter" data-level="3.2" data-path="system-setup.html"><a href="system-setup.html#a-production-environment"><i class="fa fa-check"></i><b>3.2</b> A production environment</a><ul>
+<li class="chapter" data-level="3.2.1" data-path="system-setup.html"><a href="system-setup.html#installing-drivers"><i class="fa fa-check"></i><b>3.2.1</b> Installing drivers</a></li>
+<li class="chapter" data-level="3.2.2" data-path="system-setup.html"><a href="system-setup.html#installing-rstudio"><i class="fa fa-check"></i><b>3.2.2</b> Installing Rstudio</a></li>
+<li class="chapter" data-level="3.2.3" data-path="system-setup.html"><a href="system-setup.html#installing-sql-workbench"><i class="fa fa-check"></i><b>3.2.3</b> Installing SQL Workbench</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="system-setup.html"><a href="system-setup.html#connecting-to-a-database-from-r"><i class="fa fa-check"></i><b>3.3</b> Connecting to a database from R</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="a-relational-state-of-mind.html"><a href="a-relational-state-of-mind.html"><i class="fa fa-check"></i><b>4</b> A relational state of mind</a><ul>
+<li class="chapter" data-level="4.1" data-path="a-relational-state-of-mind.html"><a href="a-relational-state-of-mind.html#an-illustrated-example-with-movie-data"><i class="fa fa-check"></i><b>4.1</b> An illustrated example with movie-data</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="loading-data.html"><a href="loading-data.html"><i class="fa fa-check"></i><b>5</b> Loading our data</a></li>
+<li class="chapter" data-level="6" data-path="basic-sql.html"><a href="basic-sql.html"><i class="fa fa-check"></i><b>6</b> Basic SQL</a><ul>
+<li class="chapter" data-level="6.1" data-path="basic-sql.html"><a href="basic-sql.html#select-from-where-starting-our-exploration"><i class="fa fa-check"></i><b>6.1</b> <code>SELECT</code> <code>FROM</code> <code>WHERE</code>? Starting our exploration</a><ul>
+<li class="chapter" data-level="6.1.1" data-path="basic-sql.html"><a href="basic-sql.html#a-quick-glance-at-our-data"><i class="fa fa-check"></i><b>6.1.1</b> A quick glance at our data</a></li>
+<li class="chapter" data-level="6.1.2" data-path="basic-sql.html"><a href="basic-sql.html#simple-aggregates"><i class="fa fa-check"></i><b>6.1.2</b> Aggregating your results</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="basic-sql.html"><a href="basic-sql.html#more-ways-to-join-tables"><i class="fa fa-check"></i><b>6.2</b> More ways to <code>JOIN</code> tables</a></li>
+<li class="chapter" data-level="6.3" data-path="basic-sql.html"><a href="basic-sql.html#a-few-common-gotchas"><i class="fa fa-check"></i><b>6.3</b> A few common gotchas</a><ul>
+<li class="chapter" data-level="6.3.1" data-path="basic-sql.html"><a href="basic-sql.html#missing-values"><i class="fa fa-check"></i><b>6.3.1</b> Missing values</a></li>
+<li class="chapter" data-level="6.3.2" data-path="basic-sql.html"><a href="basic-sql.html#execution-order"><i class="fa fa-check"></i><b>6.3.2</b> Execution order</a></li>
+<li class="chapter" data-level="6.3.3" data-path="basic-sql.html"><a href="basic-sql.html#ansi-and-the-dialects"><i class="fa fa-check"></i><b>6.3.3</b> ANSI and the dialects</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="intermediate-sql-intermediate-sql.html"><a href="intermediate-sql-intermediate-sql.html"><i class="fa fa-check"></i><b>7</b> Intermediate SQL {intermediate-sql}</a><ul>
+<li class="chapter" data-level="7.1" data-path="intermediate-sql-intermediate-sql.html"><a href="intermediate-sql-intermediate-sql.html#create-conditional-statements-with-case-when"><i class="fa fa-check"></i><b>7.1</b> Create conditional statements with <code>CASE WHEN</code></a></li>
+<li class="chapter" data-level="7.2" data-path="intermediate-sql-intermediate-sql.html"><a href="intermediate-sql-intermediate-sql.html#filter-on-aggregates-with-having"><i class="fa fa-check"></i><b>7.2</b> Filter on aggregates with <code>HAVING</code></a></li>
+<li class="chapter" data-level="7.3" data-path="intermediate-sql-intermediate-sql.html"><a href="intermediate-sql-intermediate-sql.html#more-about-limiting-the-result-with-fetch-first"><i class="fa fa-check"></i><b>7.3</b> More about limiting the result with <code>FETCH FIRST</code></a></li>
+<li class="chapter" data-level="7.4" data-path="intermediate-sql-intermediate-sql.html"><a href="intermediate-sql-intermediate-sql.html#simple-convenience-functions"><i class="fa fa-check"></i><b>7.4</b> Simple convenience functions</a><ul>
+<li class="chapter" data-level="7.4.1" data-path="intermediate-sql-intermediate-sql.html"><a href="intermediate-sql-intermediate-sql.html#the-decode-function"><i class="fa fa-check"></i><b>7.4.1</b> The <code>decode</code> function</a></li>
+<li class="chapter" data-level="7.4.2" data-path="intermediate-sql-intermediate-sql.html"><a href="intermediate-sql-intermediate-sql.html#upper-lower"><i class="fa fa-check"></i><b>7.4.2</b> upper / lower</a></li>
+<li class="chapter" data-level="7.4.3" data-path="intermediate-sql-intermediate-sql.html"><a href="intermediate-sql-intermediate-sql.html#substring"><i class="fa fa-check"></i><b>7.4.3</b> substring</a></li>
+<li class="chapter" data-level="7.4.4" data-path="intermediate-sql-intermediate-sql.html"><a href="intermediate-sql-intermediate-sql.html#regular-expressions"><i class="fa fa-check"></i><b>7.4.4</b> Regular expressions</a></li>
+<li class="chapter" data-level="7.4.5" data-path="intermediate-sql-intermediate-sql.html"><a href="intermediate-sql-intermediate-sql.html#dates"><i class="fa fa-check"></i><b>7.4.5</b> Dealing with dates</a></li>
+</ul></li>
+<li class="chapter" data-level="7.5" data-path="intermediate-sql-intermediate-sql.html"><a href="intermediate-sql-intermediate-sql.html#what-we-are-not-going-to-cover"><i class="fa fa-check"></i><b>7.5</b> What we are not going to cover</a><ul>
+<li class="chapter" data-level="7.5.1" data-path="intermediate-sql-intermediate-sql.html"><a href="intermediate-sql-intermediate-sql.html#plsql"><i class="fa fa-check"></i><b>7.5.1</b> PL/SQL</a></li>
+<li class="chapter" data-level="7.5.2" data-path="intermediate-sql-intermediate-sql.html"><a href="intermediate-sql-intermediate-sql.html#the-dbplyr-library"><i class="fa fa-check"></i><b>7.5.2</b> the <code>dbplyr</code> library</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="aggregation-functions-aggregation-functions.html"><a href="aggregation-functions-aggregation-functions.html"><i class="fa fa-check"></i><b>8</b> Aggregation functions {aggregation-functions}</a><ul>
+<li class="chapter" data-level="8.1" data-path="aggregation-functions-aggregation-functions.html"><a href="aggregation-functions-aggregation-functions.html#median-and-quantiles"><i class="fa fa-check"></i><b>8.1</b> Median and quantiles</a></li>
+<li class="chapter" data-level="8.2" data-path="aggregation-functions-aggregation-functions.html"><a href="aggregation-functions-aggregation-functions.html#first-values-first-values"><i class="fa fa-check"></i><b>8.2</b> First values {first-values}</a></li>
+<li class="chapter" data-level="8.3" data-path="aggregation-functions-aggregation-functions.html"><a href="aggregation-functions-aggregation-functions.html#aggregating-text"><i class="fa fa-check"></i><b>8.3</b> Aggregating text</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="analytical-functions.html"><a href="analytical-functions.html"><i class="fa fa-check"></i><b>9</b> Analytical functions</a><ul>
+<li class="chapter" data-level="9.1" data-path="analytical-functions.html"><a href="analytical-functions.html#windows"><i class="fa fa-check"></i><b>9.1</b> Over the partitions and far away</a></li>
+<li class="chapter" data-level="9.2" data-path="analytical-functions.html"><a href="analytical-functions.html#models"><i class="fa fa-check"></i><b>9.2</b> Models</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="statistical-functions.html"><a href="statistical-functions.html"><i class="fa fa-check"></i><b>10</b> Statistical functions</a><ul>
+<li class="chapter" data-level="10.1" data-path="statistical-functions.html"><a href="statistical-functions.html#covariance-revisitng-quantity-vs-unitprice"><i class="fa fa-check"></i><b>10.1</b> Covariance: Revisitng quantity vs unitprice</a></li>
+<li class="chapter" data-level="10.2" data-path="statistical-functions.html"><a href="statistical-functions.html#regression"><i class="fa fa-check"></i><b>10.2</b> Regression</a></li>
+<li class="chapter" data-level="10.3" data-path="statistical-functions.html"><a href="statistical-functions.html#t-tests"><i class="fa fa-check"></i><b>10.3</b> T-tests</a></li>
+<li class="chapter" data-level="10.4" data-path="statistical-functions.html"><a href="statistical-functions.html#kolmogorov-smirnoff-tests"><i class="fa fa-check"></i><b>10.4</b> Kolmogorov-Smirnoff tests</a></li>
+<li class="chapter" data-level="10.5" data-path="statistical-functions.html"><a href="statistical-functions.html#and-more..."><i class="fa fa-check"></i><b>10.5</b> And more...</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="row-pattern-matching.html"><a href="row-pattern-matching.html"><i class="fa fa-check"></i><b>11</b> Row pattern matching</a><ul>
+<li class="chapter" data-level="11.1" data-path="row-pattern-matching.html"><a href="row-pattern-matching.html#a-simpleish-example"><i class="fa fa-check"></i><b>11.1</b> A simple(ish) example</a></li>
+<li class="chapter" data-level="11.2" data-path="row-pattern-matching.html"><a href="row-pattern-matching.html#a-more-involved-example"><i class="fa fa-check"></i><b>11.2</b> A more involved example</a><ul>
+<li class="chapter" data-level="11.2.1" data-path="row-pattern-matching.html"><a href="row-pattern-matching.html#importing-and-cleaning"><i class="fa fa-check"></i><b>11.2.1</b> Importing and cleaning</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="inserting-and-updating-data.html"><a href="inserting-and-updating-data.html"><i class="fa fa-check"></i><b>12</b> Inserting and updating data</a><ul>
+<li class="chapter" data-level="12.1" data-path="inserting-and-updating-data.html"><a href="inserting-and-updating-data.html#committing-changes-to-a-database"><i class="fa fa-check"></i><b>12.1</b> Committing changes to a database</a></li>
+<li class="chapter" data-level="12.2" data-path="inserting-and-updating-data.html"><a href="inserting-and-updating-data.html#truncate-dont-drop"><i class="fa fa-check"></i><b>12.2</b> Truncate, don't drop</a></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="performance-and-integrity.html"><a href="performance-and-integrity.html"><i class="fa fa-check"></i><b>13</b> Performance and integrity</a><ul>
+<li class="chapter" data-level="13.1" data-path="performance-and-integrity.html"><a href="performance-and-integrity.html#indexes"><i class="fa fa-check"></i><b>13.1</b> Indexes</a></li>
+<li class="chapter" data-level="13.2" data-path="performance-and-integrity.html"><a href="performance-and-integrity.html#constraints"><i class="fa fa-check"></i><b>13.2</b> constraints</a></li>
+<li class="chapter" data-level="13.3" data-path="performance-and-integrity.html"><a href="performance-and-integrity.html#optimizing-your-queries"><i class="fa fa-check"></i><b>13.3</b> Optimizing your queries</a><ul>
+<li class="chapter" data-level="13.3.1" data-path="performance-and-integrity.html"><a href="performance-and-integrity.html#inline-views"><i class="fa fa-check"></i><b>13.3.1</b> Inline views</a></li>
+<li class="chapter" data-level="13.3.2" data-path="performance-and-integrity.html"><a href="performance-and-integrity.html#filter-first"><i class="fa fa-check"></i><b>13.3.2</b> Filter First</a></li>
+<li class="chapter" data-level="13.3.3" data-path="performance-and-integrity.html"><a href="performance-and-integrity.html#take-advantage-of-partitions"><i class="fa fa-check"></i><b>13.3.3</b> Take advantage of partitions</a></li>
+<li class="chapter" data-level="13.3.4" data-path="performance-and-integrity.html"><a href="performance-and-integrity.html#explain-plans"><i class="fa fa-check"></i><b>13.3.4</b> Explain plans</a></li>
+<li class="chapter" data-level="13.3.5" data-path="performance-and-integrity.html"><a href="performance-and-integrity.html#leave-some-things-for-r"><i class="fa fa-check"></i><b>13.3.5</b> Leave some things for R</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="14" data-path="shiny-and-oracle.html"><a href="shiny-and-oracle.html"><i class="fa fa-check"></i><b>14</b> Shiny and Oracle</a></li>
+<li class="chapter" data-level="15" data-path="relevance-to-other-databases.html"><a href="relevance-to-other-databases.html"><i class="fa fa-check"></i><b>15</b> Relevance to other databases</a></li>
+<li class="chapter" data-level="16" data-path="big-data-databases.html"><a href="big-data-databases.html"><i class="fa fa-check"></i><b>16</b> Big Data Databases</a><ul>
+<li class="chapter" data-level="16.1" data-path="big-data-databases.html"><a href="big-data-databases.html#what-is-hive-and-how-does-it-compare"><i class="fa fa-check"></i><b>16.1</b> What is hive, and how does it compare</a></li>
+</ul></li>
+<li class="chapter" data-level="17" data-path="what-oracle-r-enterprise-is.html"><a href="what-oracle-r-enterprise-is.html"><i class="fa fa-check"></i><b>17</b> What Oracle R Enterprise is</a><ul>
+<li class="chapter" data-level="17.1" data-path="what-oracle-r-enterprise-is.html"><a href="what-oracle-r-enterprise-is.html#loading-ore"><i class="fa fa-check"></i><b>17.1</b> Loading ORE</a></li>
+<li class="chapter" data-level="17.2" data-path="what-oracle-r-enterprise-is.html"><a href="what-oracle-r-enterprise-is.html#pushing-r-computation-to-the-database"><i class="fa fa-check"></i><b>17.2</b> Pushing R computation to the database</a></li>
+<li class="chapter" data-level="17.3" data-path="what-oracle-r-enterprise-is.html"><a href="what-oracle-r-enterprise-is.html#ore-build-in-algorithms"><i class="fa fa-check"></i><b>17.3</b> ORE build-in algorithms</a></li>
+<li class="chapter" data-level="17.4" data-path="what-oracle-r-enterprise-is.html"><a href="what-oracle-r-enterprise-is.html#calling-r-from-sql"><i class="fa fa-check"></i><b>17.4</b> Calling R from SQL</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Data analysis with R and Oracle</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="big-data-databases" class="section level1">
+<h1><span class="header-section-number">Chapter 16</span> Big Data Databases</h1>
+<div id="what-is-hive-and-how-does-it-compare" class="section level2">
+<h2><span class="header-section-number">16.1</span> What is hive, and how does it compare</h2>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="relevance-to-other-databases.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="what-oracle-r-enterprise-is.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/rstudio/bookdown-demo/edit/master/15-bigdata-db.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["bookdown-demo.pdf", "bookdown-demo.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

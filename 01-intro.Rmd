@@ -1,0 +1,61 @@
+# Introduction {#intro}
+
+Are you past the point where your source data is an excel spreadsheet? Has the IT department granted you access to their database? Are you expected to rummage through way more data than you can hold in memory?
+
+Databases used to be great at little more than retrieving a given record at speed, and making sure that reads and writes happened consistenly and in order. Boring as they may sound, such features made sure that your balance was returned to you when you went to the ATM, and that you couldn't withdraw the same money twice in rapid succession.
+
+Quick information retrieval and data consistency is still the bread and butter of databases, but the marmelade is a rapidly evolving set of powerful features aimed at analyzing and aggregating vast amounts of data.
+
+This book will guide you through some of the useful features that are available in modern databases, focusing on the possibilities in Oracle 12c. Oracle is a feature-rich database, and widely used database in corporate environments. And it is in corporate production environments most of todays data analysis needs are situated.
+
+The examples could just as easily have been about PostgreSQL, which is also very powerful, has some amazing features and extensions, and unlike Oracle is open-source. In contrast, Oracle is widely (and wildly!) disdained in the open-source community, not without reason. Coupling commercial Oracle with open-source R could seem like a joke, but it is not. To that point, both Oracle and Microsoft are making great efforts to integrate R with their databases.
+
+Luckily, many of the great features in Oracle are available in Postgres and other database systems as well. The examples will be based on Oracle, and we will not cover functions available in Postgres but not Oracle, but there is a large overlap. And I will make my best efforts to note which features are available verbatim in other databases, which have close analogues, and which are exclusive to Oracle.
+
+
+## What analysts need
+
+The basic outline of an analysis is ususally something like this:
+
+<i>You wake up in the middle of the night, with a bright and shiny idea. Or maybe an epiphany hits you when you are biking home from work. Wherever it strikes you, all of a sudden you have a theory or a glowing need to check something in your data.
+
+The first step is selecting (filtering), the tables, rows and columns you want. This might be tedious in itself, and require you to track down some near-retiree in accounting just to discover that the column you thought was a godsend is actually 85% missing and of no real use to you, or that the documentation for half of the categorical variables you want to use is nowhere to be found.
+
+Discouraged, this might derail your entire analysis. Even though "it can't be done" is a valid result, it is not a satisfying one.
+
+But maybe the shortcomings in data quality and documentation are only a speed bump. Blissfully, you conclude that the basic information needed to answer your question is present, and delude yourself to think that the rest is trivial. Simply a few lines of code, and amazing new insight will be shining from your lacklustre office monitor.
+
+Alas, although you now know the mission should be possible it is far from accomplished. A lot of selecting, filtering, reshaping and cleaning is still ahead of you, and as any programmer knows, the little things can trip you just as bad as the big things.
+
+Having understood the source data, you know which columns to select and which conditions to filter the data on. On a good day this is two lines of code, but if you need to filter data on some less trivial conditions it might take days simply to carve out the necessary logic to subset your data correctly, and another day to verify that it did indeed work as intended.
+
+The next hurdle is structuring the data. Although data stored in databases usually follow a clear structure, this is often not the structure you need to have in order to complete your analyis. Like earlier, this could be as simple as joining a couple of tables or it could turn out to be a bottomless rabbithole of new things to learn - with a lot of dead ends and failed attempts on the way.
+
+Still you are not done, even though you had hoped you were on the home straight. The structuring and aggregations have probably revealed something new about your data, outliers that had gone unnoticed before or invalid combinations of values. More data cleaning is necessary, and a grand combination of heuristic rules, outlier detection thresholds and maybe even imputation rules are applied in order to cover up the horrors that were exposed by your adventures in data consolidation.
+
+By now it has been a week since you got your bright idea, you have worked on it constantly, and still you have nothing to show for it. Your boss is losing confidence in you, probably aided by the phone call he got from accounting concerning all the weird data questions you were bothering their people with. Go home. Call it a week. Come back rested on monday.
+
+Finally though, the grunt work is over. The data makes sense, and you can feed it into the algorithms and visualizations you were dreaming about. After two error messages due to incorrect data types, all the columns have been converted and the algorithm churns away. For once, you made the computer sweat, not the other way around.
+
+You whip together a simple choropleth map, and send it to your boss. After all that toil, the thing that makes him excited is a few pretty colors that were created in five lines of code. If you could only persuade IT to let you have a Shiny server on the company network, he would probably be beside himself. Nah, a choropleth will have to do for now.</i>
+
+The tediousness of analysis is unescapable, but a good understanding of databases can help the situation:
+
+- Understanding the thinking behind relational database architecture can help you understand how the source data is structured, ask the right questions, and keep you on the good side of the sysadmins.
+
+- Initial exploratory analysis might be done directly against the source data using a SQL client, speeding up the question-answer process significantly by giving you access to all the data in the blink of an eye.
+
+- Even though you can do initial exploration in an SQL client, you will probably need several attempts at extracting the source data from the database. A seamless and fast workflow to alter queries and load data from the database to R will speed up analysis.
+
+- Some aggregations, joins and calculations are better done in the database. For example:
+
+  a. When a lot of rows simply need to be aggregated, before analysis can begin. Rather than transfering and loading 5 gigabytes of data into R, it can be a lot quicker to sum them in SQL and load maybe 100 MB instead. And if the data is even bigger, it might not even be possible to load it all into R. Aggregating it in the database is the convenient alternative to some slow, complicated mapreduce-like aggregation in R.
+  
+  b. Doing joins in the database can allow you to filter out unneeded data instead of first loading it in R and filtering it thereafter.
+  
+  c. The seemingly random differences in available functions between R and SQL can sometimes work in SQL's advantage. Some typical business functions are easily avaiable in SQL, and some more novel and complex functions are only available in SQL.
+  
+  d. Depending on your computer and your database, some calculations are simply faster in SQL.
+
+All this allows you to explore your data faster, iterate quickly, spend less time waiting for the computer to finish, and create more novel analysis by drawing on a richer set of analytical functions.
+

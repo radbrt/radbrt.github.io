@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 7 Intermediate SQL {intermediate-sql} | Data analysis with R and Oracle</title>
+  <meta name="description" content="Oracle is one of the most common database systems used in the business world. For analysts, an Oracle database is often their data souce. Being able to effectively query databases, and leave to the database what the database is best at and R what R is best at, can speed up analysis and reduce computational overhead." />
+  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 7 Intermediate SQL {intermediate-sql} | Data analysis with R and Oracle" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="Oracle is one of the most common database systems used in the business world. For analysts, an Oracle database is often their data souce. Being able to effectively query databases, and leave to the database what the database is best at and R what R is best at, can speed up analysis and reduce computational overhead." />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 7 Intermediate SQL {intermediate-sql} | Data analysis with R and Oracle" />
+  
+  <meta name="twitter:description" content="Oracle is one of the most common database systems used in the business world. For analysts, an Oracle database is often their data souce. Being able to effectively query databases, and leave to the database what the database is best at and R what R is best at, can speed up analysis and reduce computational overhead." />
+  
+
+<meta name="author" content="Henning Holgersen" />
+
+
+<meta name="date" content="2021-04-22" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="basic-sql.html"/>
+<link rel="next" href="aggregation-functions-aggregation-functions.html"/>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">A Minimal Book Example</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Who is this book for?</a><ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#what-will-the-book-cover"><i class="fa fa-check"></i><b>1.1</b> What will the book cover?</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#what-does-the-book-not-cover"><i class="fa fa-check"></i><b>1.2</b> What does the book not cover?</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>2</b> Introduction</a><ul>
+<li class="chapter" data-level="2.1" data-path="intro.html"><a href="intro.html#what-analysts-need"><i class="fa fa-check"></i><b>2.1</b> What analysts need</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="system-setup.html"><a href="system-setup.html"><i class="fa fa-check"></i><b>3</b> System setup</a><ul>
+<li class="chapter" data-level="3.1" data-path="system-setup.html"><a href="system-setup.html#follow-along-with-the-bigdata-lite-vm-or-xe18-on-docker"><i class="fa fa-check"></i><b>3.1</b> Follow along with the BigData Lite VM or XE18 on Docker</a></li>
+<li class="chapter" data-level="3.2" data-path="system-setup.html"><a href="system-setup.html#a-production-environment"><i class="fa fa-check"></i><b>3.2</b> A production environment</a><ul>
+<li class="chapter" data-level="3.2.1" data-path="system-setup.html"><a href="system-setup.html#installing-drivers"><i class="fa fa-check"></i><b>3.2.1</b> Installing drivers</a></li>
+<li class="chapter" data-level="3.2.2" data-path="system-setup.html"><a href="system-setup.html#installing-rstudio"><i class="fa fa-check"></i><b>3.2.2</b> Installing Rstudio</a></li>
+<li class="chapter" data-level="3.2.3" data-path="system-setup.html"><a href="system-setup.html#installing-sql-workbench"><i class="fa fa-check"></i><b>3.2.3</b> Installing SQL Workbench</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="system-setup.html"><a href="system-setup.html#connecting-to-a-database-from-r"><i class="fa fa-check"></i><b>3.3</b> Connecting to a database from R</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="a-relational-state-of-mind.html"><a href="a-relational-state-of-mind.html"><i class="fa fa-check"></i><b>4</b> A relational state of mind</a><ul>
+<li class="chapter" data-level="4.1" data-path="a-relational-state-of-mind.html"><a href="a-relational-state-of-mind.html#an-illustrated-example-with-movie-data"><i class="fa fa-check"></i><b>4.1</b> An illustrated example with movie-data</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="loading-data.html"><a href="loading-data.html"><i class="fa fa-check"></i><b>5</b> Loading our data</a></li>
+<li class="chapter" data-level="6" data-path="basic-sql.html"><a href="basic-sql.html"><i class="fa fa-check"></i><b>6</b> Basic SQL</a><ul>
+<li class="chapter" data-level="6.1" data-path="basic-sql.html"><a href="basic-sql.html#select-from-where-starting-our-exploration"><i class="fa fa-check"></i><b>6.1</b> <code>SELECT</code> <code>FROM</code> <code>WHERE</code>? Starting our exploration</a><ul>
+<li class="chapter" data-level="6.1.1" data-path="basic-sql.html"><a href="basic-sql.html#a-quick-glance-at-our-data"><i class="fa fa-check"></i><b>6.1.1</b> A quick glance at our data</a></li>
+<li class="chapter" data-level="6.1.2" data-path="basic-sql.html"><a href="basic-sql.html#simple-aggregates"><i class="fa fa-check"></i><b>6.1.2</b> Aggregating your results</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="basic-sql.html"><a href="basic-sql.html#more-ways-to-join-tables"><i class="fa fa-check"></i><b>6.2</b> More ways to <code>JOIN</code> tables</a></li>
+<li class="chapter" data-level="6.3" data-path="basic-sql.html"><a href="basic-sql.html#a-few-common-gotchas"><i class="fa fa-check"></i><b>6.3</b> A few common gotchas</a><ul>
+<li class="chapter" data-level="6.3.1" data-path="basic-sql.html"><a href="basic-sql.html#missing-values"><i class="fa fa-check"></i><b>6.3.1</b> Missing values</a></li>
+<li class="chapter" data-level="6.3.2" data-path="basic-sql.html"><a href="basic-sql.html#execution-order"><i class="fa fa-check"></i><b>6.3.2</b> Execution order</a></li>
+<li class="chapter" data-level="6.3.3" data-path="basic-sql.html"><a href="basic-sql.html#ansi-and-the-dialects"><i class="fa fa-check"></i><b>6.3.3</b> ANSI and the dialects</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="intermediate-sql-intermediate-sql.html"><a href="intermediate-sql-intermediate-sql.html"><i class="fa fa-check"></i><b>7</b> Intermediate SQL {intermediate-sql}</a><ul>
+<li class="chapter" data-level="7.1" data-path="intermediate-sql-intermediate-sql.html"><a href="intermediate-sql-intermediate-sql.html#create-conditional-statements-with-case-when"><i class="fa fa-check"></i><b>7.1</b> Create conditional statements with <code>CASE WHEN</code></a></li>
+<li class="chapter" data-level="7.2" data-path="intermediate-sql-intermediate-sql.html"><a href="intermediate-sql-intermediate-sql.html#filter-on-aggregates-with-having"><i class="fa fa-check"></i><b>7.2</b> Filter on aggregates with <code>HAVING</code></a></li>
+<li class="chapter" data-level="7.3" data-path="intermediate-sql-intermediate-sql.html"><a href="intermediate-sql-intermediate-sql.html#more-about-limiting-the-result-with-fetch-first"><i class="fa fa-check"></i><b>7.3</b> More about limiting the result with <code>FETCH FIRST</code></a></li>
+<li class="chapter" data-level="7.4" data-path="intermediate-sql-intermediate-sql.html"><a href="intermediate-sql-intermediate-sql.html#simple-convenience-functions"><i class="fa fa-check"></i><b>7.4</b> Simple convenience functions</a><ul>
+<li class="chapter" data-level="7.4.1" data-path="intermediate-sql-intermediate-sql.html"><a href="intermediate-sql-intermediate-sql.html#the-decode-function"><i class="fa fa-check"></i><b>7.4.1</b> The <code>decode</code> function</a></li>
+<li class="chapter" data-level="7.4.2" data-path="intermediate-sql-intermediate-sql.html"><a href="intermediate-sql-intermediate-sql.html#upper-lower"><i class="fa fa-check"></i><b>7.4.2</b> upper / lower</a></li>
+<li class="chapter" data-level="7.4.3" data-path="intermediate-sql-intermediate-sql.html"><a href="intermediate-sql-intermediate-sql.html#substring"><i class="fa fa-check"></i><b>7.4.3</b> substring</a></li>
+<li class="chapter" data-level="7.4.4" data-path="intermediate-sql-intermediate-sql.html"><a href="intermediate-sql-intermediate-sql.html#regular-expressions"><i class="fa fa-check"></i><b>7.4.4</b> Regular expressions</a></li>
+<li class="chapter" data-level="7.4.5" data-path="intermediate-sql-intermediate-sql.html"><a href="intermediate-sql-intermediate-sql.html#dates"><i class="fa fa-check"></i><b>7.4.5</b> Dealing with dates</a></li>
+</ul></li>
+<li class="chapter" data-level="7.5" data-path="intermediate-sql-intermediate-sql.html"><a href="intermediate-sql-intermediate-sql.html#what-we-are-not-going-to-cover"><i class="fa fa-check"></i><b>7.5</b> What we are not going to cover</a><ul>
+<li class="chapter" data-level="7.5.1" data-path="intermediate-sql-intermediate-sql.html"><a href="intermediate-sql-intermediate-sql.html#plsql"><i class="fa fa-check"></i><b>7.5.1</b> PL/SQL</a></li>
+<li class="chapter" data-level="7.5.2" data-path="intermediate-sql-intermediate-sql.html"><a href="intermediate-sql-intermediate-sql.html#the-dbplyr-library"><i class="fa fa-check"></i><b>7.5.2</b> the <code>dbplyr</code> library</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="aggregation-functions-aggregation-functions.html"><a href="aggregation-functions-aggregation-functions.html"><i class="fa fa-check"></i><b>8</b> Aggregation functions {aggregation-functions}</a><ul>
+<li class="chapter" data-level="8.1" data-path="aggregation-functions-aggregation-functions.html"><a href="aggregation-functions-aggregation-functions.html#median-and-quantiles"><i class="fa fa-check"></i><b>8.1</b> Median and quantiles</a></li>
+<li class="chapter" data-level="8.2" data-path="aggregation-functions-aggregation-functions.html"><a href="aggregation-functions-aggregation-functions.html#first-values-first-values"><i class="fa fa-check"></i><b>8.2</b> First values {first-values}</a></li>
+<li class="chapter" data-level="8.3" data-path="aggregation-functions-aggregation-functions.html"><a href="aggregation-functions-aggregation-functions.html#aggregating-text"><i class="fa fa-check"></i><b>8.3</b> Aggregating text</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="analytical-functions.html"><a href="analytical-functions.html"><i class="fa fa-check"></i><b>9</b> Analytical functions</a><ul>
+<li class="chapter" data-level="9.1" data-path="analytical-functions.html"><a href="analytical-functions.html#windows"><i class="fa fa-check"></i><b>9.1</b> Over the partitions and far away</a></li>
+<li class="chapter" data-level="9.2" data-path="analytical-functions.html"><a href="analytical-functions.html#models"><i class="fa fa-check"></i><b>9.2</b> Models</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="statistical-functions.html"><a href="statistical-functions.html"><i class="fa fa-check"></i><b>10</b> Statistical functions</a><ul>
+<li class="chapter" data-level="10.1" data-path="statistical-functions.html"><a href="statistical-functions.html#covariance-revisitng-quantity-vs-unitprice"><i class="fa fa-check"></i><b>10.1</b> Covariance: Revisitng quantity vs unitprice</a></li>
+<li class="chapter" data-level="10.2" data-path="statistical-functions.html"><a href="statistical-functions.html#regression"><i class="fa fa-check"></i><b>10.2</b> Regression</a></li>
+<li class="chapter" data-level="10.3" data-path="statistical-functions.html"><a href="statistical-functions.html#t-tests"><i class="fa fa-check"></i><b>10.3</b> T-tests</a></li>
+<li class="chapter" data-level="10.4" data-path="statistical-functions.html"><a href="statistical-functions.html#kolmogorov-smirnoff-tests"><i class="fa fa-check"></i><b>10.4</b> Kolmogorov-Smirnoff tests</a></li>
+<li class="chapter" data-level="10.5" data-path="statistical-functions.html"><a href="statistical-functions.html#and-more..."><i class="fa fa-check"></i><b>10.5</b> And more...</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="row-pattern-matching.html"><a href="row-pattern-matching.html"><i class="fa fa-check"></i><b>11</b> Row pattern matching</a><ul>
+<li class="chapter" data-level="11.1" data-path="row-pattern-matching.html"><a href="row-pattern-matching.html#a-simpleish-example"><i class="fa fa-check"></i><b>11.1</b> A simple(ish) example</a></li>
+<li class="chapter" data-level="11.2" data-path="row-pattern-matching.html"><a href="row-pattern-matching.html#a-more-involved-example"><i class="fa fa-check"></i><b>11.2</b> A more involved example</a><ul>
+<li class="chapter" data-level="11.2.1" data-path="row-pattern-matching.html"><a href="row-pattern-matching.html#importing-and-cleaning"><i class="fa fa-check"></i><b>11.2.1</b> Importing and cleaning</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="inserting-and-updating-data.html"><a href="inserting-and-updating-data.html"><i class="fa fa-check"></i><b>12</b> Inserting and updating data</a><ul>
+<li class="chapter" data-level="12.1" data-path="inserting-and-updating-data.html"><a href="inserting-and-updating-data.html#committing-changes-to-a-database"><i class="fa fa-check"></i><b>12.1</b> Committing changes to a database</a></li>
+<li class="chapter" data-level="12.2" data-path="inserting-and-updating-data.html"><a href="inserting-and-updating-data.html#truncate-dont-drop"><i class="fa fa-check"></i><b>12.2</b> Truncate, don't drop</a></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="performance-and-integrity.html"><a href="performance-and-integrity.html"><i class="fa fa-check"></i><b>13</b> Performance and integrity</a><ul>
+<li class="chapter" data-level="13.1" data-path="performance-and-integrity.html"><a href="performance-and-integrity.html#indexes"><i class="fa fa-check"></i><b>13.1</b> Indexes</a></li>
+<li class="chapter" data-level="13.2" data-path="performance-and-integrity.html"><a href="performance-and-integrity.html#constraints"><i class="fa fa-check"></i><b>13.2</b> constraints</a></li>
+<li class="chapter" data-level="13.3" data-path="performance-and-integrity.html"><a href="performance-and-integrity.html#optimizing-your-queries"><i class="fa fa-check"></i><b>13.3</b> Optimizing your queries</a><ul>
+<li class="chapter" data-level="13.3.1" data-path="performance-and-integrity.html"><a href="performance-and-integrity.html#inline-views"><i class="fa fa-check"></i><b>13.3.1</b> Inline views</a></li>
+<li class="chapter" data-level="13.3.2" data-path="performance-and-integrity.html"><a href="performance-and-integrity.html#filter-first"><i class="fa fa-check"></i><b>13.3.2</b> Filter First</a></li>
+<li class="chapter" data-level="13.3.3" data-path="performance-and-integrity.html"><a href="performance-and-integrity.html#take-advantage-of-partitions"><i class="fa fa-check"></i><b>13.3.3</b> Take advantage of partitions</a></li>
+<li class="chapter" data-level="13.3.4" data-path="performance-and-integrity.html"><a href="performance-and-integrity.html#explain-plans"><i class="fa fa-check"></i><b>13.3.4</b> Explain plans</a></li>
+<li class="chapter" data-level="13.3.5" data-path="performance-and-integrity.html"><a href="performance-and-integrity.html#leave-some-things-for-r"><i class="fa fa-check"></i><b>13.3.5</b> Leave some things for R</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="14" data-path="shiny-and-oracle.html"><a href="shiny-and-oracle.html"><i class="fa fa-check"></i><b>14</b> Shiny and Oracle</a></li>
+<li class="chapter" data-level="15" data-path="relevance-to-other-databases.html"><a href="relevance-to-other-databases.html"><i class="fa fa-check"></i><b>15</b> Relevance to other databases</a></li>
+<li class="chapter" data-level="16" data-path="big-data-databases.html"><a href="big-data-databases.html"><i class="fa fa-check"></i><b>16</b> Big Data Databases</a><ul>
+<li class="chapter" data-level="16.1" data-path="big-data-databases.html"><a href="big-data-databases.html#what-is-hive-and-how-does-it-compare"><i class="fa fa-check"></i><b>16.1</b> What is hive, and how does it compare</a></li>
+</ul></li>
+<li class="chapter" data-level="17" data-path="what-oracle-r-enterprise-is.html"><a href="what-oracle-r-enterprise-is.html"><i class="fa fa-check"></i><b>17</b> What Oracle R Enterprise is</a><ul>
+<li class="chapter" data-level="17.1" data-path="what-oracle-r-enterprise-is.html"><a href="what-oracle-r-enterprise-is.html#loading-ore"><i class="fa fa-check"></i><b>17.1</b> Loading ORE</a></li>
+<li class="chapter" data-level="17.2" data-path="what-oracle-r-enterprise-is.html"><a href="what-oracle-r-enterprise-is.html#pushing-r-computation-to-the-database"><i class="fa fa-check"></i><b>17.2</b> Pushing R computation to the database</a></li>
+<li class="chapter" data-level="17.3" data-path="what-oracle-r-enterprise-is.html"><a href="what-oracle-r-enterprise-is.html#ore-build-in-algorithms"><i class="fa fa-check"></i><b>17.3</b> ORE build-in algorithms</a></li>
+<li class="chapter" data-level="17.4" data-path="what-oracle-r-enterprise-is.html"><a href="what-oracle-r-enterprise-is.html#calling-r-from-sql"><i class="fa fa-check"></i><b>17.4</b> Calling R from SQL</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Data analysis with R and Oracle</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="intermediate-sql-intermediate-sql" class="section level1">
+<h1><span class="header-section-number">Chapter 7</span> Intermediate SQL {intermediate-sql}</h1>
+<p>You now have a good knowledge of basic SQL, and you are able to create subsets, aggregations and new combinations of data. This is already enough to make good use of any database you have access to, allowing you leverage the database's data crunching abilities to extract results much more tailored to your needs than simply copying the entire table from Oracle to R.</p>
+<div id="create-conditional-statements-with-case-when" class="section level2">
+<h2><span class="header-section-number">7.1</span> Create conditional statements with <code>CASE WHEN</code></h2>
+<p>SQL is not made for traditional programming with looping, conditional operations, and variable assignments i the fast and loose way that we might be used to from other languages. SQL is operations on datasets, but there is a syntax for if-else statements that comes in handy: <code>CASE WHEN</code>.</p>
+<p>We noted earlier that some of the sales in our transaction data seems to be negative - which is unexpected. In real world data, surprises like this are common, and often come about because you lack knowledge of where the data comes from. Indeed, if you have experience from sales, you might be bored right now thinking <em>of course some reciepts are negative! Have you never heard of a return?</em></p>
+<p>Let's explore the negative values a little more. Since it was the product of <code>unitPrice</code> and <code>Quantity</code> that was negative, we are looking for rows where either one of them is negative (but strictly speaking it would be OK if both of them were). As so often, we start by just looking at a few examples to get a feel for what we are dealing with.</p>
+<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql"><span class="kw">SELECT</span> * <span class="kw">FROM</span> trx
+<span class="kw">WHERE</span> unitprice&lt;<span class="dv">0</span> <span class="kw">OR</span> quantity&lt;<span class="dv">0</span>
+FETCH <span class="fu">FIRST</span> <span class="dv">10</span> <span class="kw">ROWS</span> <span class="kw">ONLY</span></code></pre></div>
+<div class="knitsql-table">
+<table>
+<caption><span id="tab:unnamed-chunk-12">Table 7.1: </span>Displaying records 1 - 10</caption>
+<colgroup>
+<col width="8%" />
+<col width="8%" />
+<col width="26%" />
+<col width="7%" />
+<col width="16%" />
+<col width="8%" />
+<col width="9%" />
+<col width="12%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">INVOICENO</th>
+<th align="left">STOCKCODE</th>
+<th align="left">DESCRIPTION</th>
+<th align="right">QUANTITY</th>
+<th align="left">INVOICEDATE</th>
+<th align="right">UNITPRICE</th>
+<th align="right">CUSTOMERID</th>
+<th align="left">COUNTRY</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">C536391</td>
+<td align="left">22556</td>
+<td align="left">PLASTERS IN TIN CIRCUS PARADE</td>
+<td align="right">-12</td>
+<td align="left">2010-12-01 10:24:00</td>
+<td align="right">1.65</td>
+<td align="right">17548</td>
+<td align="left">United Kingdom</td>
+</tr>
+<tr class="even">
+<td align="left">C536391</td>
+<td align="left">21984</td>
+<td align="left">PACK OF 12 PINK PAISLEY TISSUES</td>
+<td align="right">-24</td>
+<td align="left">2010-12-01 10:24:00</td>
+<td align="right">0.29</td>
+<td align="right">17548</td>
+<td align="left">United Kingdom</td>
+</tr>
+<tr class="odd">
+<td align="left">C536391</td>
+<td align="left">21983</td>
+<td align="left">PACK OF 12 BLUE PAISLEY TISSUES</td>
+<td align="right">-24</td>
+<td align="left">2010-12-01 10:24:00</td>
+<td align="right">0.29</td>
+<td align="right">17548</td>
+<td align="left">United Kingdom</td>
+</tr>
+<tr class="even">
+<td align="left">C536391</td>
+<td align="left">21980</td>
+<td align="left">PACK OF 12 RED RETROSPOT TISSUES</td>
+<td align="right">-24</td>
+<td align="left">2010-12-01 10:24:00</td>
+<td align="right">0.29</td>
+<td align="right">17548</td>
+<td align="left">United Kingdom</td>
+</tr>
+<tr class="odd">
+<td align="left">C536391</td>
+<td align="left">21484</td>
+<td align="left">CHICK GREY HOT WATER BOTTLE</td>
+<td align="right">-12</td>
+<td align="left">2010-12-01 10:24:00</td>
+<td align="right">3.45</td>
+<td align="right">17548</td>
+<td align="left">United Kingdom</td>
+</tr>
+<tr class="even">
+<td align="left">C536391</td>
+<td align="left">22557</td>
+<td align="left">PLASTERS IN TIN VINTAGE PAISLEY</td>
+<td align="right">-12</td>
+<td align="left">2010-12-01 10:24:00</td>
+<td align="right">1.65</td>
+<td align="right">17548</td>
+<td align="left">United Kingdom</td>
+</tr>
+<tr class="odd">
+<td align="left">C536391</td>
+<td align="left">22553</td>
+<td align="left">PLASTERS IN TIN SKULLS</td>
+<td align="right">-24</td>
+<td align="left">2010-12-01 10:24:00</td>
+<td align="right">1.65</td>
+<td align="right">17548</td>
+<td align="left">United Kingdom</td>
+</tr>
+<tr class="even">
+<td align="left">C536379</td>
+<td align="left">D</td>
+<td align="left">Discount</td>
+<td align="right">-1</td>
+<td align="left">2010-12-01 09:41:00</td>
+<td align="right">27.50</td>
+<td align="right">14527</td>
+<td align="left">United Kingdom</td>
+</tr>
+<tr class="odd">
+<td align="left">C536383</td>
+<td align="left">35004C</td>
+<td align="left">SET OF 3 COLOURED FLYING DUCKS</td>
+<td align="right">-1</td>
+<td align="left">2010-12-01 09:49:00</td>
+<td align="right">4.65</td>
+<td align="right">15311</td>
+<td align="left">United Kingdom</td>
+</tr>
+<tr class="even">
+<td align="left">C536506</td>
+<td align="left">22960</td>
+<td align="left">JAM MAKING SET WITH JARS</td>
+<td align="right">-6</td>
+<td align="left">2010-12-01 12:38:00</td>
+<td align="right">4.25</td>
+<td align="right">17897</td>
+<td align="left">United Kingdom</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Immediately, we notice that these are often quite normal-sounding products, and the quantity is negative, not the price. Let's check that theory.</p>
+<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql"><span class="kw">SELECT</span> * <span class="kw">FROM</span> trx
+<span class="kw">WHERE</span> unitprice&lt;<span class="dv">0</span>
+FETCH <span class="fu">FIRST</span> <span class="dv">10</span> <span class="kw">ROWS</span> <span class="kw">ONLY</span></code></pre></div>
+<div class="knitsql-table">
+<table>
+<caption><span id="tab:unnamed-chunk-13">Table 7.2: </span>2 records</caption>
+<colgroup>
+<col width="10%" />
+<col width="10%" />
+<col width="15%" />
+<col width="9%" />
+<col width="19%" />
+<col width="10%" />
+<col width="11%" />
+<col width="14%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">INVOICENO</th>
+<th align="left">STOCKCODE</th>
+<th align="left">DESCRIPTION</th>
+<th align="right">QUANTITY</th>
+<th align="left">INVOICEDATE</th>
+<th align="right">UNITPRICE</th>
+<th align="right">CUSTOMERID</th>
+<th align="left">COUNTRY</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">A563186</td>
+<td align="left">B</td>
+<td align="left">Adjust bad debt</td>
+<td align="right">1</td>
+<td align="left">2011-08-12 14:51:00</td>
+<td align="right">-11062</td>
+<td align="right">NA</td>
+<td align="left">United Kingdom</td>
+</tr>
+<tr class="even">
+<td align="left">A563187</td>
+<td align="left">B</td>
+<td align="left">Adjust bad debt</td>
+<td align="right">1</td>
+<td align="left">2011-08-12 14:52:00</td>
+<td align="right">-11062</td>
+<td align="right">NA</td>
+<td align="left">United Kingdom</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Out of over 500 000 rows, 2 have a negative unit price because they seem to be striking bad debt that they can't collect.</p>
+<p>Now, we can use the <code>CASE WHEN</code> clause to find the total effect of these negative values.</p>
+<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql"><span class="kw">SELECT</span> <span class="fu">SUM</span>(<span class="kw">CASE</span> <span class="kw">WHEN</span> quantity&gt;<span class="dv">0</span> <span class="kw">AND</span> unitPrice&gt;<span class="dv">0</span> <span class="kw">THEN</span> quantity*unitPrice <span class="kw">ELSE</span> <span class="kw">NULL</span> <span class="kw">END</span>) <span class="kw">AS</span> positive_sales, 
+  <span class="fu">SUM</span>(quantity*unitPrice) <span class="kw">AS</span> all_sales 
+<span class="kw">FROM</span> trx</code></pre></div>
+<div class="knitsql-table">
+<table>
+<caption><span id="tab:unnamed-chunk-14">Table 7.3: </span>1 records</caption>
+<thead>
+<tr class="header">
+<th align="right">POSITIVE_SALES</th>
+<th align="right">ALL_SALES</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">10666685</td>
+<td align="right">9747748</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Had the shop been able to stave off bad debt and the negative quantities that we for now presume to be returns, it would have 10 million pounds in revenue. The difference, close to 900 000 ponds, is about 10 % of sales. In order to find out if this is to be expected, we would need to talk to someone with knowledge of the business.</p>
+<p>From a technical standpoint, the SQL sums either the product of quantity and unitPrice if they are both positive, or NULL (which the sum function implicitly omits) if one or both of them is negative. This gives us the sum of positive sales right next to the sum of all sales. Thanks to <code>CASE WHEN</code> there was no need to split this into two queries. In R, aggregation functions usually return NA (the R version of NULL) by default if one or more values it is aggregating is NA. SQL simply omits missing values, pretending they aren't even there.</p>
+<table style="width:54%;">
+<colgroup>
+<col width="54%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Other Databases</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Oracle requires any group by variables to be included in the select statement too. Some other databases do not require this. Likewise, the group by statement can not include the shortnames assigned to the variables</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="filter-on-aggregates-with-having" class="section level2">
+<h2><span class="header-section-number">7.2</span> Filter on aggregates with <code>HAVING</code></h2>
+<p>When we found the 4 biggest countries, we used the <code>rownum</code> keyword in combination with <code>ORDER BY</code> to get the 4 biggest countries. 4 was an arbitrary cutoff, maybe we are interested in all countries with more than 100 000 pounds in total sales? The <code>WHERE</code> clause only works on the underlying rows, not on computed aggregates. Instead, there is a seperate keyword, <code>HAVING</code>, that lets you filter on the aggregated values. Let's find the countries with more than 100 000 in revenue.</p>
+<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql"><span class="kw">SELECT</span> country, <span class="fu">SUM</span>(quantity*unitPrice) <span class="kw">AS</span> sales <span class="kw">FROM</span> trx
+<span class="kw">GROUP</span> <span class="kw">BY</span> country
+<span class="kw">HAVING</span> <span class="fu">SUM</span>(quantity*unitPrice)&gt;<span class="dv">100000</span>
+<span class="kw">ORDER</span> <span class="kw">BY</span> <span class="dv">2</span> <span class="kw">desc</span></code></pre></div>
+<p>There is a total of 6 contries that sold for mor than 100 000 pounds, with Australia closest to the cutoff with 137 000 in sales. Unfortunately, <code>HAVING</code> doesn't understand the column names we assign in <code>SELECT</code> (<code>sales</code> in this case), so we need to repeat the entire expression when filtering. <code>ORDER BY</code>, on the other hand, is perfectly happy sorting by either <code>sales</code> or simply the column number as shown here.</p>
+</div>
+<div id="more-about-limiting-the-result-with-fetch-first" class="section level2">
+<h2><span class="header-section-number">7.3</span> More about limiting the result with <code>FETCH FIRST</code></h2>
+<p>We have already seen how to return only a given number of rows with the <code>FETCH FIRST</code> command. Some may be familiar with another way of limiting results, using the <code>ROWNUM</code> pseudo-column like this:</p>
+<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql"><span class="kw">SELECT</span> country, description <span class="kw">FROM</span> trx
+<span class="kw">WHERE</span> <span class="kw">rownum</span> &lt; <span class="dv">10</span></code></pre></div>
+<div class="knitsql-table">
+<table>
+<caption>(#tab:rownum_sql)9 records</caption>
+<thead>
+<tr class="header">
+<th align="left">COUNTRY</th>
+<th align="left">DESCRIPTION</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">United Kingdom</td>
+<td align="left">CREAM HEART CARD HOLDER</td>
+</tr>
+<tr class="even">
+<td align="left">United Kingdom</td>
+<td align="left">ENAMEL FLOWER JUG CREAM</td>
+</tr>
+<tr class="odd">
+<td align="left">United Kingdom</td>
+<td align="left">ENAMEL FIRE BUCKET CREAM</td>
+</tr>
+<tr class="even">
+<td align="left">United Kingdom</td>
+<td align="left">ENAMEL BREAD BIN CREAM</td>
+</tr>
+<tr class="odd">
+<td align="left">United Kingdom</td>
+<td align="left">SET 3 WICKER OVAL BASKETS W LIDS</td>
+</tr>
+<tr class="even">
+<td align="left">United Kingdom</td>
+<td align="left">JAM MAKING SET PRINTED</td>
+</tr>
+<tr class="odd">
+<td align="left">United Kingdom</td>
+<td align="left">JAM MAKING SET WITH JARS</td>
+</tr>
+<tr class="even">
+<td align="left">United Kingdom</td>
+<td align="left">JUMBO BAG DOLLY GIRL DESIGN</td>
+</tr>
+<tr class="odd">
+<td align="left">United Kingdom</td>
+<td align="left">TRADITIONAL CHRISTMAS RIBBONS</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>This works just fine in many situations, but has two drawbacks. For one, it doesn't work on aggregates. The following query would fail:</p>
+<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql"><span class="kw">SELECT</span> country, <span class="fu">COUNT</span>(<span class="dv">1</span>) <span class="kw">FROM</span> trx
+<span class="kw">GROUP</span> <span class="kw">BY</span> country
+<span class="kw">HAVING</span> <span class="kw">rownum</span> &lt; <span class="dv">10</span></code></pre></div>
+<p><code>FETCH FIRST</code> on the other hand, works like a charm.</p>
+<p><code>FETCH FIRST</code> can also be combined with an offset, letting you fetch, say, row 11-20 instead of row 1-10. This is not possible with <code>ROWNUM</code>, as the first row returned is always row one. Including <code>WHERE ROWNUM&gt;10</code> in a query will return an empty resultset.</p>
+<p>Offsets can be handy in, for example, the classical example of cycling through a paginated list of items. You have a large number of rows, ordered by some condition, and you want to show only 10 at a time, with a &quot;next page&quot; link at the bottom of the list. If we want to show rows 11-20, we can simply modify the query slightly.</p>
+<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql"><span class="kw">SELECT</span> country, <span class="fu">SUM</span>(quantity*unitPrice) <span class="kw">AS</span> sales <span class="kw">FROM</span> trx
+<span class="kw">GROUP</span> <span class="kw">BY</span> country
+<span class="kw">ORDER</span> <span class="kw">BY</span> sales <span class="kw">desc</span>
+OFFSET <span class="dv">10</span> <span class="kw">ROWS</span> FETCH <span class="kw">NEXT</span> <span class="dv">10</span> <span class="kw">ROWS</span> <span class="kw">ONLY</span></code></pre></div>
+<div class="knitsql-table">
+<table>
+<caption>(#tab:country_groupby_sum_mult)Displaying records 1 - 10</caption>
+<thead>
+<tr class="header">
+<th align="left">COUNTRY</th>
+<th align="right">SALES</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Japan</td>
+<td align="right">35341</td>
+</tr>
+<tr class="even">
+<td align="left">Norway</td>
+<td align="right">35163</td>
+</tr>
+<tr class="odd">
+<td align="left">Portugal</td>
+<td align="right">29367</td>
+</tr>
+<tr class="even">
+<td align="left">Finland</td>
+<td align="right">22327</td>
+</tr>
+<tr class="odd">
+<td align="left">Channel Islands</td>
+<td align="right">20086</td>
+</tr>
+<tr class="even">
+<td align="left">Denmark</td>
+<td align="right">18768</td>
+</tr>
+<tr class="odd">
+<td align="left">Italy</td>
+<td align="right">16891</td>
+</tr>
+<tr class="even">
+<td align="left">Cyprus</td>
+<td align="right">12946</td>
+</tr>
+<tr class="odd">
+<td align="left">Austria</td>
+<td align="right">10154</td>
+</tr>
+<tr class="even">
+<td align="left">Hong Kong</td>
+<td align="right">10117</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="simple-convenience-functions" class="section level2">
+<h2><span class="header-section-number">7.4</span> Simple convenience functions</h2>
+<div id="the-decode-function" class="section level3">
+<h3><span class="header-section-number">7.4.1</span> The <code>decode</code> function</h3>
+<p>Sometimes, a <code>CASE WHEN</code> statement can be a little much. Enter the <code>decode</code> function, which is a type of case-when statement as a function. The <code>decode</code> function takes an even number of arguments. The first value is the variable or expression you want to check. The second and the third are the value you are checking against and the value you want returned, respectively. This argument pair can be repeated any number of times. Lastly, there is a single argument to specify the <em>else</em> value, which is returned if none of the previously stated happen.</p>
+<p>Say, you want to quickly recode the <code>gender</code> from 'Male' and 'Female' to the german equivalents. This can be done as follows:</p>
+<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql"><span class="kw">SELECT</span> <span class="fu">DECODE</span>(gender, <span class="st">&#39;Male&#39;</span>, <span class="st">&#39;Männlich&#39;</span>, <span class="st">&#39;Weiblich&#39;</span>) <span class="kw">FROM</span> customer</code></pre></div>
+<div class="knitsql-table">
+<table>
+<caption>(#tab:decode_first_example)Displaying records 1 - 10</caption>
+<thead>
+<tr class="header">
+<th align="left">DECODE(GENDER,'MALE','MANNLICH','WEIBLICH')</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Mannlich</td>
+</tr>
+<tr class="even">
+<td align="left">Mannlich</td>
+</tr>
+<tr class="odd">
+<td align="left">Mannlich</td>
+</tr>
+<tr class="even">
+<td align="left">Mannlich</td>
+</tr>
+<tr class="odd">
+<td align="left">Mannlich</td>
+</tr>
+<tr class="even">
+<td align="left">Mannlich</td>
+</tr>
+<tr class="odd">
+<td align="left">Mannlich</td>
+</tr>
+<tr class="even">
+<td align="left">Weiblich</td>
+</tr>
+<tr class="odd">
+<td align="left">Mannlich</td>
+</tr>
+<tr class="even">
+<td align="left">Mannlich</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>If we want to take care of potential missing/bad values in the data, we have to add an <em>unknown</em> category. If we don't, all values not equal to 'Male' will return with the <em>female</em> label. At the same time, lets use what we have learned about aggregations and unions to check that the result is correct (and learn something about the gender balance among our customers).</p>
+<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql"><span class="kw">SELECT</span> <span class="fu">DECODE</span>(gender, <span class="st">&#39;Male&#39;</span>, <span class="st">&#39;Männlich&#39;</span>, <span class="st">&#39;Female&#39;</span>, <span class="st">&#39;Weiblich&#39;</span>, <span class="st">&#39;Nicht spezifiziert&#39;</span>) <span class="kw">AS</span> geschlecht, <span class="fu">COUNT</span>(<span class="dv">1</span>) <span class="kw">AS</span> anzahl <span class="kw">FROM</span> (
+<span class="kw">SELECT</span> gender <span class="kw">FROM</span> customer
+<span class="kw">UNION</span> <span class="kw">ALL</span>
+<span class="kw">SELECT</span> <span class="kw">NULL</span> <span class="kw">AS</span> gender <span class="kw">FROM</span> dual
+)
+<span class="kw">GROUP</span> <span class="kw">BY</span> <span class="fu">DECODE</span>(gender, <span class="st">&#39;Male&#39;</span>, <span class="st">&#39;Männlich&#39;</span>, <span class="st">&#39;Female&#39;</span>, <span class="st">&#39;Weiblich&#39;</span>, <span class="st">&#39;Nicht spezifiziert&#39;</span>)
+<span class="kw">ORDER</span> <span class="kw">BY</span> <span class="dv">2</span> <span class="kw">DESC</span></code></pre></div>
+<div class="knitsql-table">
+<table>
+<caption>(#tab:decode_function)3 records</caption>
+<thead>
+<tr class="header">
+<th align="left">GESCHLECHT</th>
+<th align="right">ANZAHL</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Mannlich</td>
+<td align="right">2479</td>
+</tr>
+<tr class="even">
+<td align="left">Weiblich</td>
+<td align="right">2369</td>
+</tr>
+<tr class="odd">
+<td align="left">Nicht spezifiziert</td>
+<td align="right">1</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The <code>NULL</code> value triggers the <em>other</em> part of the decode function, and results in one extra row and one entry in the &quot;unspecified&quot; category.</p>
+</div>
+<div id="upper-lower" class="section level3">
+<h3><span class="header-section-number">7.4.2</span> upper / lower</h3>
+<p>In many search and language processing applications it is vital to omit differences in capitalization. The fastest way to do this is usually to convert everything to upper- or lowercase, which can be done easily in SQL with the UPPER() and LOWER() function.</p>
+<p>These functions are quite uncomplicated. The short example below converts email-addresses to both upper and lower case.</p>
+<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql"><span class="kw">SELECT</span> email, <span class="fu">UPPER</span>(email), <span class="fu">LOWER</span>(email) <span class="kw">FROM</span> customer
+FETCH <span class="fu">FIRST</span> <span class="dv">5</span> <span class="kw">ROWS</span> <span class="kw">ONLY</span></code></pre></div>
+<div class="knitsql-table">
+<table>
+<caption>(#tab:upper_lower)5 records</caption>
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">EMAIL</th>
+<th align="left">UPPER(EMAIL)</th>
+<th align="left">LOWER(EMAIL)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><a href="mailto:Laurel.Recker@oraclemail.com">Laurel.Recker@oraclemail.com</a></td>
+<td align="left"><a href="mailto:LAUREL.RECKER@ORACLEMAIL.COM">LAUREL.RECKER@ORACLEMAIL.COM</a></td>
+<td align="left"><a href="mailto:laurel.recker@oraclemail.com">laurel.recker@oraclemail.com</a></td>
+</tr>
+<tr class="even">
+<td align="left"><a href="mailto:Otto.Suzuki@oraclemail.com">Otto.Suzuki@oraclemail.com</a></td>
+<td align="left"><a href="mailto:OTTO.SUZUKI@ORACLEMAIL.COM">OTTO.SUZUKI@ORACLEMAIL.COM</a></td>
+<td align="left"><a href="mailto:otto.suzuki@oraclemail.com">otto.suzuki@oraclemail.com</a></td>
+</tr>
+<tr class="odd">
+<td align="left"><a href="mailto:Ta-Heng.Klossovsky@oraclemail.com">Ta-Heng.Klossovsky@oraclemail.com</a></td>
+<td align="left"><a href="mailto:TA-HENG.KLOSSOVSKY@ORACLEMAIL.COM">TA-HENG.KLOSSOVSKY@ORACLEMAIL.COM</a></td>
+<td align="left"><a href="mailto:ta-heng.klossovsky@oraclemail.com">ta-heng.klossovsky@oraclemail.com</a></td>
+</tr>
+<tr class="even">
+<td align="left"><a href="mailto:Bhadrabuja.Rovigo@oraclemail.com">Bhadrabuja.Rovigo@oraclemail.com</a></td>
+<td align="left"><a href="mailto:BHADRABUJA.ROVIGO@ORACLEMAIL.COM">BHADRABUJA.ROVIGO@ORACLEMAIL.COM</a></td>
+<td align="left"><a href="mailto:bhadrabuja.rovigo@oraclemail.com">bhadrabuja.rovigo@oraclemail.com</a></td>
+</tr>
+<tr class="odd">
+<td align="left"><a href="mailto:Candrin.Lyakhov@oraclemail.com">Candrin.Lyakhov@oraclemail.com</a></td>
+<td align="left"><a href="mailto:CANDRIN.LYAKHOV@ORACLEMAIL.COM">CANDRIN.LYAKHOV@ORACLEMAIL.COM</a></td>
+<td align="left"><a href="mailto:candrin.lyakhov@oraclemail.com">candrin.lyakhov@oraclemail.com</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="substring" class="section level3">
+<h3><span class="header-section-number">7.4.3</span> substring</h3>
+<p>Text strings are often very well-structured, and you may know exactly which characters in the column you are interested in. The <code>SUBSTR</code> function takes two (optionally three) arguments. First, the column you want to find a substring in. Second, the letter number you want to start reading from, and optionally the number of letters you want to return.</p>
+<p>In the <code>customer</code> table, the <code>INCOME_LEVEL</code> column consists of a letter, followed by the actual income bracket. Suppose we want to return only the letter in our query, or only the income level, the <code>SUBSTR</code> function is fast and easy because we always know which position the letters and dollar amounts have.</p>
+<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql"><span class="kw">SELECT</span> gender, <span class="fu">SUBSTR</span>(income_level, <span class="dv">1</span>,<span class="dv">1</span>), <span class="fu">SUBSTR</span>(income_level, <span class="dv">4</span>) <span class="kw">FROM</span> customer
+FETCH <span class="fu">FIRST</span> <span class="dv">5</span> <span class="kw">ROWS</span> <span class="kw">ONLY</span></code></pre></div>
+<div class="knitsql-table">
+<table>
+<caption>(#tab:substr_first5)5 records</caption>
+<thead>
+<tr class="header">
+<th align="left">GENDER</th>
+<th align="left">SUBSTR(INCOME_LEVEL,1,1)</th>
+<th align="left">SUBSTR(INCOME_LEVEL,4)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Male</td>
+<td align="left">E</td>
+<td align="left">90,000 - 109,999</td>
+</tr>
+<tr class="even">
+<td align="left">Male</td>
+<td align="left">E</td>
+<td align="left">90,000 - 109,999</td>
+</tr>
+<tr class="odd">
+<td align="left">Male</td>
+<td align="left">A</td>
+<td align="left">Below 30,000</td>
+</tr>
+<tr class="even">
+<td align="left">Male</td>
+<td align="left">C</td>
+<td align="left">50,000 - 69,999</td>
+</tr>
+<tr class="odd">
+<td align="left">Male</td>
+<td align="left">F</td>
+<td align="left">110,000 - 129,999</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="regular-expressions" class="section level3">
+<h3><span class="header-section-number">7.4.4</span> Regular expressions</h3>
+<p>Making sense of freeform text is always a challenge, and regular expressions (or regex in jargon) is a powerful tool for the task. Regex is a way too complex subject to explain in detail here, but we do afford ourselves a few examples from Oracle's regex functions.</p>
+<p>In short, regex allows you to find patterns in text, such as extracting only digits from a field, validating email addresses, or select all capitalized words that occur in groups of two or more (suspected personal names).</p>
+<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql"><span class="kw">SELECT</span> <span class="fu">COUNT</span>(*) <span class="kw">FROM</span> customer
+<span class="kw">WHERE</span> <span class="fu">REGEXP_LIKE</span>(email, <span class="st">&#39;[a-zA-Z0-9_\.]+@[a-zA-Z0-9_\.]+\.[a-zA-Z]&#39;</span>)</code></pre></div>
+<div class="knitsql-table">
+<table>
+<caption>(#tab:regex_count)1 records</caption>
+<thead>
+<tr class="header">
+<th align="right">COUNT(*)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">4832</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>We could also extract last names (as in: last word in the name) from the cast table, and see what last names are most popular in Hollywood.</p>
+<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql"><span class="kw">SELECT</span> <span class="fu">regexp_substr</span>(name, <span class="st">&#39;\w+$&#39;</span>) <span class="kw">AS</span> last_name, <span class="fu">COUNT</span>(<span class="dv">1</span>) <span class="kw">AS</span> occurences <span class="kw">FROM</span> crew
+<span class="kw">GROUP</span> <span class="kw">BY</span> <span class="fu">regexp_substr</span>(name, <span class="st">&#39;\w+$&#39;</span>)
+<span class="kw">ORDER</span> <span class="kw">BY</span> <span class="dv">2</span> <span class="kw">DESC</span></code></pre></div>
+<div class="knitsql-table">
+<table>
+<caption>(#tab:regex_groupby)Displaying records 1 - 10</caption>
+<thead>
+<tr class="header">
+<th align="left">LAST_NAME</th>
+<th align="right">OCCURENCES</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">NA</td>
+<td align="right">84</td>
+</tr>
+<tr class="even">
+<td align="left">small</td>
+<td align="right">60</td>
+</tr>
+<tr class="odd">
+<td align="left">Smith</td>
+<td align="right">31</td>
+</tr>
+<tr class="even">
+<td align="left">Johnson</td>
+<td align="right">23</td>
+</tr>
+<tr class="odd">
+<td align="left">Jones</td>
+<td align="right">22</td>
+</tr>
+<tr class="even">
+<td align="left">Miller</td>
+<td align="right">20</td>
+</tr>
+<tr class="odd">
+<td align="left">Williams</td>
+<td align="right">17</td>
+</tr>
+<tr class="even">
+<td align="left">Cohen</td>
+<td align="right">16</td>
+</tr>
+<tr class="odd">
+<td align="left">Wilson</td>
+<td align="right">16</td>
+</tr>
+<tr class="even">
+<td align="left">Lee</td>
+<td align="right">16</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>There are other regex functions in Oracle, that lets you replace text (<code>REGEXP_REPLACE</code>) and count the number of occurences of a pattern in a string (<code>REGEX_COUNT</code>).</p>
+</div>
+<div id="dates" class="section level3">
+<h3><span class="header-section-number">7.4.5</span> Dealing with dates</h3>
+<p>There is a good chance that a table near you has a column that represents time in some sense. There is also a good chance that the column is stored as something other than a date. Sometimes this is reasonable, but a lot of the time, storing dates and times as actual dates and times can be very beneficial.</p>
+<p>We already touched on the concept of dates in chapter <a href="loading-data.html#loading-data">5</a>, but we did not elaborate on it. What we did, was to instruct the database that the column <code>INVOICEDATE</code> should be interpreted as a date, and specify the date format in a separate argument. In our case, we were dealing with not just a date but with a timestamp containing the date in the format <strong>YYYY-MM-DD</strong> followed by a space followed by the time in the format of <strong>HH24:MI:SS</strong> - that is the hour (zulu-time, 24 hours), colon, minutes (00-59), colon, seconds (00-59). The entire line of code called the <code>TO_DATE</code> function, with the argument is <code>TO_DATE(INVOICEDATE, 'YYYY-MM-DD HH24:MI:SS') AS INVOICEDATE</code>.</p>
+<p>Having a column properly defined as a date, you can start doing some neat stuff like subtracting two dates from each other, which returns the number of days in between. Try it yourself:</p>
+<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql"><span class="kw">SELECT</span> <span class="fu">TO_DATE</span>(<span class="st">&#39;01-01-2017&#39;</span>, <span class="st">&#39;DD-MM-YYYY&#39;</span>) - <span class="fu">TO_DATE</span>(<span class="st">&#39;01-01-2016&#39;</span>, <span class="st">&#39;DD-MM-YYYY&#39;</span>) <span class="kw">AS</span> time_diff <span class="kw">FROM</span> DUAL</code></pre></div>
+<div class="knitsql-table">
+<table>
+<caption>(#tab:sql_date_diff)1 records</caption>
+<thead>
+<tr class="header">
+<th align="right">TIME_DIFF</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">366</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>If you think the database must be of its rockers to suggest there was 366 days between january 1st 2016 and january 1 2017, remember that 2016 was a leap year. R has the same concepts, a similar way of parsing dates (which you also saw briefly in chapter <a href="loading-data.html#loading-data">5</a>), and is also in agreement that there were 366 days in between january 1st 2016 and january 1st 2017.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">strptime</span>(<span class="st">&quot;01/01/2017&quot;</span>, <span class="dt">format =</span> <span class="st">&quot;%m/%d/%Y&quot;</span>) <span class="op">-</span><span class="st"> </span><span class="kw">strptime</span>(<span class="st">&quot;01/01/2016&quot;</span>, <span class="dt">format =</span> <span class="st">&quot;%m/%d/%Y&quot;</span>)</code></pre></div>
+<pre><code>## Time difference of 366 days</code></pre>
+<p>Once your column is defined as a date, there are some other nice features built in that can be very useful. Dates can be converted to many other formats, such as week number, or day of week. Lets check our sales by day of week:</p>
+<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql"><span class="kw">SELECT</span> <span class="fu">TO_CHAR</span>(invoicedate, <span class="st">&#39;DAY&#39;</span>), <span class="fu">SUM</span>(quantity) <span class="kw">AS</span> units_sold <span class="kw">FROM</span> trx
+<span class="kw">GROUP</span> <span class="kw">BY</span> <span class="fu">TO_CHAR</span>(invoicedate, <span class="st">&#39;DAY&#39;</span>)
+<span class="kw">ORDER</span> <span class="kw">BY</span> <span class="dv">2</span> <span class="kw">DESC</span></code></pre></div>
+<div class="knitsql-table">
+<table>
+<caption>(#tab:convert_to_day)6 records</caption>
+<thead>
+<tr class="header">
+<th align="left">TO_CHAR(INVOICEDATE,'DAY')</th>
+<th align="right">UNITS_SOLD</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">THURSDAY</td>
+<td align="right">1167823</td>
+</tr>
+<tr class="even">
+<td align="left">WEDNESDAY</td>
+<td align="right">969558</td>
+</tr>
+<tr class="odd">
+<td align="left">TUESDAY</td>
+<td align="right">961543</td>
+</tr>
+<tr class="even">
+<td align="left">MONDAY</td>
+<td align="right">815354</td>
+</tr>
+<tr class="odd">
+<td align="left">FRIDAY</td>
+<td align="right">794440</td>
+</tr>
+<tr class="even">
+<td align="left">SUNDAY</td>
+<td align="right">467732</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>There is definetely something odd about this data - there were no sales on saturdays, but there were sales on sunday.</p>
+<p>Lets look at sales by week as well. But we don't want a 52-row output table to browse, so we'll do the aggregation in SQL and pass the result to R and ggplot.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">q &lt;-<span class="st"> </span><span class="kw">dbSendQuery</span>(con, <span class="st">&quot;</span>
+<span class="st">SELECT TO_CHAR(invoicedate, &#39;WW&#39;) AS WEEK, SUM(quantity) AS UNITS_SOLD FROM trx</span>
+<span class="st">GROUP BY TO_CHAR(invoicedate, &#39;WW&#39;)</span>
+<span class="st">ORDER BY 2 DESC</span>
+<span class="st">&quot;</span>)
+df &lt;-<span class="st"> </span><span class="kw">fetch</span>(q)
+
+<span class="kw">library</span>(ggplot2)
+<span class="kw">library</span>(dplyr)
+df <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(WEEK, UNITS_SOLD)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">&#39;identity&#39;</span>) </code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/ggplot_week_ch6-1.png" width="672" /></p>
+<p>Ggplot needs to know that this data is already aggregated, and we specify this by the argument <code>stat='identity'</code> that we pass to <code>geom_bar</code>.</p>
+<p>Hopefully needless to say, R has similar capabilities in expressing dates as weeks and aggregating. As an example, lets try to make the same chart using R.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">q &lt;-<span class="st"> </span><span class="kw">dbSendQuery</span>(con, <span class="st">&quot;</span>
+<span class="st">SELECT invoicedate, quantity FROM trx</span>
+<span class="st">&quot;</span>)
+df &lt;-<span class="st"> </span><span class="kw">fetch</span>(q) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">week =</span> <span class="kw">strftime</span>(INVOICEDATE, <span class="dt">format =</span> <span class="st">&quot;%V&quot;</span>))
+
+<span class="kw">library</span>(ggplot2)
+<span class="kw">library</span>(dplyr)
+df <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(week)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_bar</span>(<span class="kw">aes</span>(<span class="dt">weight =</span> QUANTITY) )</code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/ggplot_date_agg-1.png" width="672" /></p>
+<p>As we hoped for, the charts look identical, and its up to you to decide which one to use. If the data is big enough, you probably want to do leave the aggregation to the database.</p>
+</div>
+</div>
+<div id="what-we-are-not-going-to-cover" class="section level2">
+<h2><span class="header-section-number">7.5</span> What we are not going to cover</h2>
+<div id="plsql" class="section level3">
+<h3><span class="header-section-number">7.5.1</span> PL/SQL</h3>
+<p><code>PL/SQL</code> is Oracle's programming language extension to SQL. It lets you declare variables, run conditional statements and loops, in order to generate SQL statements on the fly.</p>
+<p>Since we are using R which usually covers these use cases, there are few arguments for learning PL/SQL too.</p>
+</div>
+<div id="the-dbplyr-library" class="section level3">
+<h3><span class="header-section-number">7.5.2</span> the <code>dbplyr</code> library</h3>
+<p>If you prefer avoid SQL when possible, you should consider using a library called <code>dbplyr</code>. This is an interface that lets you write code that should be familiar to any <code>dplyr</code> user, that is then run in the database as SQL. The authors have done a great job at optimizing the code, so that the resulting database queries are every bit as performant as you could hope for. But, like many libraries, it has its limitations as well. To illustrate examples of when this works and when it doesn't, we will try to get a summary of sales by country like we did in chapter <a href="basic-sql.html#simple-aggregates">6.1.2</a>, and generate summaries by weekday like we did above.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dbplyr)
+
+<span class="co">#define a r-object that references the database table</span>
+trxtbl &lt;-<span class="st"> </span><span class="kw">tbl</span>(con, <span class="st">&quot;TRX&quot;</span>)
+
+<span class="co"># Run dplyr-code just like it was a regular data frame </span>
+trxtbl <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">group_by</span>(COUNTRY) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">summarize</span>(<span class="dt">total_sales =</span> <span class="kw">sum</span>(QUANTITY<span class="op">*</span>UNITPRICE)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">collect</span>() <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">arrange</span>(<span class="kw">desc</span>(total_sales)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">top_n</span>(<span class="dv">3</span>)</code></pre></div>
+<pre><code>## Selecting by total_sales</code></pre>
+<pre><code>## # A tibble: 3 x 2
+##   COUNTRY        total_sales
+##   &lt;chr&gt;                &lt;dbl&gt;
+## 1 United Kingdom    8187806.
+## 2 Netherlands        284662.
+## 3 EIRE               263277.</code></pre>
+<p>But if we try to do the same with weekdays, we get a strange error-message.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">trxtbl <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">week =</span> <span class="kw">strftime</span>(INVOICEDATE, <span class="dt">format=</span><span class="st">&quot;%V&quot;</span>))
+  <span class="kw">group_by</span>(week) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">summarize</span>(<span class="dt">total_sales =</span> <span class="kw">sum</span>(QUANTITY<span class="op">*</span>UNITPRICE)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">arrange</span>(<span class="kw">desc</span>(total_sales)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">top_n</span>(<span class="dv">3</span>)</code></pre></div>
+<blockquote>
+<p><code>Error in .oci.SendQuery(conn, statement, data = data, prefetch = prefetch, : ORA-00907: missing right parenthesis</code></p>
+</blockquote>
+<p>It is easy to see what went wrong, by passing the result to the <code>show_query()</code> function. We can do this in the same workflow, by just piping to <code>show_query()</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">trxtbl <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">week =</span> <span class="kw">strftime</span>(INVOICEDATE, <span class="dt">format=</span><span class="st">&quot;%V&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">group_by</span>(week) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">summarize</span>(<span class="dt">total_sales =</span> <span class="kw">sum</span>(QUANTITY<span class="op">*</span>UNITPRICE)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">arrange</span>(<span class="kw">desc</span>(total_sales)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">top_n</span>(<span class="dv">3</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">show_query</span>()</code></pre></div>
+<blockquote>
+<p><code>SELECT &quot;week&quot;, &quot;total_sales&quot;</code> <code>FROM (SELECT &quot;week&quot;, &quot;total_sales&quot;, rank() OVER (ORDER BY &quot;total_sales&quot; DESC) AS &quot;zzz12&quot;</code> <code>FROM (SELECT *</code> <code>FROM (SELECT &quot;week&quot;, SUM(&quot;QUANTITY&quot; * &quot;UNITPRICE&quot;) AS &quot;total_sales&quot;</code> <code>FROM (SELECT &quot;INVOICENO&quot;, &quot;STOCKCODE&quot;, &quot;DESCRIPTION&quot;, &quot;QUANTITY&quot;, &quot;INVOICEDATE&quot;, &quot;UNITPRICE&quot;, &quot;CUSTOMERID&quot;, &quot;COUNTRY&quot;, STRFTIME(&quot;INVOICEDATE&quot;, '%V' AS &quot;format&quot;) AS&quot;week&quot;</code> <code>FROM (&quot;TRX&quot;) ) &quot;egcdmyvzjl&quot;</code> <code>GROUP BY &quot;week&quot;) &quot;jtxdupatwa&quot;</code> <code>ORDER BY &quot;total_sales&quot; DESC) &quot;tguwvduhof&quot;) &quot;fgqwxodxti&quot;</code> <code>WHERE (&quot;zzz12&quot; &lt;= 3.0)</code></p>
+</blockquote>
+<p><code>dbplyr</code> has generated quite a large query for us, but it passed the r-specific <code>strftime</code> function into the SQL statement, which is what caused the error. SQL and R-code don't mix.</p>
+<p>The generated code ran at a cost of 3147 once the <code>strftime</code> function had been replaced with <code>TO_CHAR()</code>. Writing the same statement myself somewhat differently resulted in a cost of 3020 - a neglible difference. It is also interesting to see how <code>dbplyr</code> utilizes windowing functions, which is a fairly new addition to the SQL language. We will learn more about windowing functions in <a href="analytical-functions.html#windows">9.1</a></p>
+
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="basic-sql.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="aggregation-functions-aggregation-functions.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/rstudio/bookdown-demo/edit/master/06-intermediate-sql.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["bookdown-demo.pdf", "bookdown-demo.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

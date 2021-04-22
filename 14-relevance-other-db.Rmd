@@ -1,0 +1,15 @@
+# Relevance to other databases
+
+When you started learning SQL, you problably thought of SQL as *one* language. But as you learned more, you might have realized there are subtle differences between different databases. These differences are usually in terms of different functions being available. For example, Oracle has a function named `DECODE` that works like a brief if-else statement, while SQL Server (Microsoft) has a function named `IIF` that does basically the same thing.
+
+In addition to differences in function names, there are also differences in which features are available. By now, most databases support window-queries (using the `OVER` statement), but for many years this clause was reserved for more heavy-duty databases. But if you are looking for row pattern matching, you will have to opt for one of only a handfull of databases that supports this.
+
+There is a "standard" for the SQL language, defined by the ANSI consortium {https://blog.ansi.org/2018/10/sql-standard-iso-iec-9075-2016-ansi-x3-135/}. For casual users of SQL, reading this standard is probably not very rewarding - especially because this standard is only a guide. Databases are free to leave out some parts, include features that aren't in ANSI, and implement variations that are not entirely in line with the ANSI specification. Still, the ANSI standard serves as a reference, and creates an expectation as to what SQL should do.
+
+If you are writing SQL code that is meant to last, you might have to give a thought to wether or not to use functions particular to the DB you happen to use, or stick to the parts of SQL that works across most RDBMSes.
+
+Personally I am of the opinion that the benefit of the custom SQL functionality outweighs the drawback of having code tied to a particular product. Although the interwebs tells stories of clean shifts from one DBMS to another, I have not myself seen any of these shifts that did not also come with a major code rewrite as well.
+
+When you are juggeling R and SQL, you also have the option to do as much of possible in R and keep the SQL simple - or do a lot of computation in SQL and leave R for the last mile of computing (possibly just creating a visualization).
+
+I don't thinks it is useful to speculate in expected lifetime of languages and DBMSes. Instead, write SQL where SQL is more effective for you, and write R where R is more effective for you.

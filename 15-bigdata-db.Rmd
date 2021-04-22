@@ -1,0 +1,4 @@
+# Big Data Databases
+
+## What is hive, and how does it compare
+
